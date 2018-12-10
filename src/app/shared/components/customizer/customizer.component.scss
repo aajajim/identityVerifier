@@ -1,0 +1,23 @@
+#app-customizer {
+  position: fixed;
+  z-index: 100;
+  bottom: 16px;
+  right: 24px;
+  .handle {
+    float: right;
+  }
+  .mat-card-content  {
+    padding: 1rem 1.5rem 2rem;
+  }
+}
+.pos-rel {
+  position: relative;
+  z-index: 99;
+  .olay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, .5);
+    z-index: 100;
+  }
+}
