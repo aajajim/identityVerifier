@@ -1,0 +1,42 @@
+<div class="page-wrap height-100 mat-bg-primary">
+  <div class="session-form-hold">
+    <mat-progress-bar mode="determinate" class="session-progress"></mat-progress-bar>
+    <mat-card>
+      <mat-card-content>
+        <div class="text-center pb-1">
+          <img src="assets/images/logo-full.png" alt="" class="mb-05">
+          <p class="text-muted m-0">Log in to your Ardor account</p>
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <div class="">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>ARDR account</mat-label>
+              <input
+                matInput
+                name="ardrAccount"
+                [formControl]="loginForm.controls['ardrAccount']"
+                placeholder="ARDR account"
+                value="">
+            </mat-form-field>
+            <small 
+              *ngIf="loginForm.controls['ardrAccount'].hasError('required') && loginForm.controls['ardrAccount'].touched" 
+              class="form-error-msg">Ardor account is required</small>
+          </div>
+          
+          <div class="pb-1">
+            <mat-checkbox
+              name="rememberMe"
+              [formControl]="loginForm.controls['rememberMe']"
+              class="pb-1">Remember this computer</mat-checkbox>
+          </div>
+          
+          <button mat-raised-button class="mat-primary full-width mb-1" [disabled]="loginForm.invalid">Log in</button>
+          <div class="text-center">
+            <a [routerLink]="'/sessions/createaccount'" class="mat-primary text-center full-width">Create a new Ardor account</a>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

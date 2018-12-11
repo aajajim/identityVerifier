@@ -5,6 +5,7 @@ import { RouterModule } from "@angular/router";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { HttpModule } from '@angular/http';
 
 import { 
   MatSidenavModule,
@@ -123,7 +124,8 @@ const classesToInclude = [
     MatProgressSpinnerModule,
     MatRippleModule,
     MatDialogModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    HttpModule
   ],
   entryComponents: [AppComfirmComponent, AppLoaderComponent],
   providers: [
