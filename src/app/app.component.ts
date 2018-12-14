@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.themeService.applyMatTheme(this.renderer)
+    this.themeService.applyMatTheme(this.renderer);
   }
   changePageTitle() {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((routeChange) => {

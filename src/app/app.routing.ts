@@ -5,24 +5,23 @@ import { AuthGuard } from './shared/services/auth/auth.guard';
 
 export const rootRouterConfig: Routes = [
   { 
-    path: '', 
-    redirectTo: 'others', 
-    pathMatch: 'full' 
+    path: '',
+    redirectTo: '/sessions/login',
+    pathMatch: 'full'
   },
-
   {
-    path: '', 
+    path: '',
     component: AuthLayoutComponent,
     children: [
-      { 
-        path: 'sessions', 
+      {
+        path: 'sessions',
         loadChildren: './views/sessions/sessions.module#SessionsModule',
-        data: { title: 'Session'} 
+        data: { title: 'Session'}
       }
     ]
   },
   {
-    path: '', 
+    path: '',
     component: AdminLayoutComponent,
     canActivate: [AuthGuard],
     children: [

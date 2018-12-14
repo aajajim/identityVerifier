@@ -1,5 +1,10 @@
 <div class="page-wrap height-100 mat-bg-primary">
+  <!-- TODO ajouter ici un retour à l'utilisateur -->
   <div class="session-form-hold">
+      <p 
+      *ngIf="errorOnAccount" 
+      class="mat-primary text-center full-width form-error-msg">Unknown Ardor account</p>
+
     <mat-progress-bar mode="determinate" class="session-progress"></mat-progress-bar>
     <mat-card>
       <mat-card-content>
@@ -10,7 +15,7 @@
         <form [formGroup]="loginForm" (ngSubmit)="login()">
           <div class="">
             <mat-form-field class="full-width" appearance="outline">
-              <mat-label>ARDR account</mat-label>
+              <mat-label>ARDOR account</mat-label>
               <input
                 matInput
                 name="ardrAccount"

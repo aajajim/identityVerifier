@@ -1,24 +1,28 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatProgressBar, MatButton } from '@angular/material';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ArdorAccountService } from '../../../shared/services/ardor/ardor-account.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  providers: [ArdorAccountService]
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   @ViewChild(MatProgressBar) progressBar: MatProgressBar;
   @ViewChild(MatButton) submitButton: MatButton;
 
+  errorOnAccount: boolean;
   loginForm: FormGroup;
 
-  constructor(private ardrAS: ArdorAccountService) { }
+  constructor(
+    private ardrAS: ArdorAccountService,
+    private router: Router) { }
 
   ngOnInit() {
+    this.errorOnAccount = false;
     this.loginForm = new FormGroup({
       ardrAccount: new FormControl('', Validators.required),
       rememberMe: new FormControl(false)
@@ -26,22 +30,29 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    let props: any;
-    const loginData = this.loginForm.value;
-    console.log(loginData);
+    // Visual effect
+    this.errorOnAccount = false;
+    this.submitButton.disabled = true;
+    this.progressBar.mode = 'indeterminate';
 
+    // Get account details from ardor server
+    const loginData = this.loginForm.value;
     const acc = loginData['ardrAccount'];
-    this.ardrAS.getAccountProperties(acc).subscribe(
+    this.ardrAS.getAccount(acc).subscribe(
       (res) => {
-        props = res;
-        console.log(props);
+        if (res.publicKey !== 'undefined') {
+          this.router.navigate(['/others']);
+        }else {
+          this.loginForm.reset();
+          this.errorOnAccount = true;
+          this.submitButton.disabled = false;
+          this.progressBar.mode = 'determinate';
+        }
       },
       (err) => {
         console.log(err);
       }
     );
-    this.submitButton.disabled = true;
-    this.progressBar.mode = 'indeterminate';
   }
 
 

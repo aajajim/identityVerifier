@@ -30,7 +30,7 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
           item.urlSegments.forEach((urlSegment, j) => {
             if(j === 0)
               return item.url = `${urlSegment.path}`;
-            item.url += `/${urlSegment.path}`
+            item.url += `/${urlSegment.path}`;
           });
           if(i === 0) {
             return item;

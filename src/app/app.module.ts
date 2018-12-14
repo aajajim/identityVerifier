@@ -19,6 +19,7 @@ import { AppComponent } from './app.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ArdorAccountService } from './shared/services/ardor/ardor-account.service';
 
 
 // AoT requires an exported function for factories
@@ -50,8 +51,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   declarations: [AppComponent],
   providers: [
     { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig },
-    { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
+    { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },
+    ArdorAccountService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

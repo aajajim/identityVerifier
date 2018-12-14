@@ -31,6 +31,7 @@ import { OthersRoutes } from "./others.routing";
 import { Nested1Component } from './nested1/nested1.component';
 import { Nested2Component } from './nested2/nested2.component';
 import { Nested3Component } from './nested3/nested3.component';
+import { AppArdorAccountComponent } from './app-ardor-account/app-ardor-account.component';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { Nested3Component } from './nested3/nested3.component';
     AppGalleryComponent, 
     AppPricingComponent, 
     AppUsersComponent, 
+    AppArdorAccountComponent,
     AppBlankComponent, Nested1Component, Nested2Component, Nested3Component
   ]
 })

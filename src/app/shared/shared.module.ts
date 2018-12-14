@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from "@angular/forms";
-import { RouterModule } from "@angular/router";
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -31,7 +31,7 @@ import {
 import { HeaderSideComponent } from './components/header-side/header-side.component';
 import { SidebarSideComponent } from './components/sidebar-side/sidebar-side.component';
 
-// ONLY REQUIRED FOR **TOP** NAVIGATION LAYOUT
+// ONLY REQUIRED FOR **SIDE** NAVIGATION LAYOUT
 import { HeaderTopComponent } from './components/header-top/header-top.component';
 import { SidebarTopComponent } from './components/sidebar-top/sidebar-top.component';
 
@@ -57,18 +57,18 @@ import { EgretSideNavToggleDirective } from './directives/egret-side-nav-toggle.
 
 // PIPES
 import { RelativeTimePipe } from './pipes/relative-time.pipe';
-import { ExcerptPipe } from "./pipes/excerpt.pipe";
+import { ExcerptPipe } from './pipes/excerpt.pipe';
 import { GetValueByKeyPipe } from './pipes/get-value-by-key.pipe';
 
 // SERVICES
 import { ThemeService } from './services/theme.service';
 import { LayoutService } from './services/layout.service';
-import { NavigationService } from "./services/navigation.service";
+import { NavigationService } from './services/navigation.service';
 import { RoutePartsService } from './services/route-parts.service';
 import { AuthGuard } from './services/auth/auth.guard';
 import { AppConfirmService } from './services/app-confirm/app-confirm.service';
 import { AppLoaderService } from './services/app-loader/app-loader.service';
-
+import { ArdorAccountService } from './services/ardor/ardor-account.service';
 
 /* 
   Only Required if you want to use Angular Landing
