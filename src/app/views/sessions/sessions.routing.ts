@@ -9,7 +9,7 @@ export const SessionsRoutes: Routes = [
   {
     path: '',
     children: [{
-      path: 'createaccount',
+      path: 'create-account',
       component: CreateAccountComponent,
       data: { title: 'Create Account' }
     }, {

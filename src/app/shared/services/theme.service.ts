@@ -1,31 +1,31 @@
 import { Injectable, Inject, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import  { getQueryParam } from '../helpers/url.helper';
+import { getQueryParam } from '../helpers/url.helper';
 
 interface ITheme {
-  name: string,
-  baseColor?: string,
-  isActive?: boolean
+  name: string;
+  baseColor?: string;
+  isActive?: boolean;
 }
 
 @Injectable()
 export class ThemeService {
-  public egretThemes :ITheme[]  = [{
-    "name": "egret-dark-purple",
-    "baseColor": "#9c27b0",
-    "isActive": false
+  public egretThemes: ITheme[]  = [{
+    'name': 'egret-dark-purple',
+    'baseColor': '#9c27b0',
+    'isActive': false
   }, {
-    "name": "egret-dark-pink",
-    "baseColor": "#e91e63",
-    "isActive": false
+    'name': 'egret-dark-pink',
+    'baseColor': '#e91e63',
+    'isActive': false
   }, {
-    "name": "egret-blue",
-    "baseColor": "#247ba0",
-    "isActive": false
+    'name': 'egret-blue',
+    'baseColor': '#247ba0',
+    'isActive': false
   }, {
-    "name": "egret-indigo",
-    "baseColor": "#3f51b5",
-    "isActive": true 
+    'name': 'egret-indigo',
+    'baseColor': '#3f51b5',
+    'isActive': true
   }];
   public activatedTheme: ITheme;
 
@@ -51,7 +51,7 @@ export class ThemeService {
     this.changeTheme(r, this.activatedTheme)
   }
 
-  changeTheme(r: Renderer2, theme:ITheme) {
+  changeTheme(r: Renderer2, theme: ITheme) {
     r.removeClass(this.document.body, this.activatedTheme.name);
     r.addClass(this.document.body, theme.name);
     this.flipActiveFlag(theme)

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Http, Headers, Response  } from '@angular/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { ArdorProperty, ArdorAccount } from '../../models/ardor.model';
+import { ArdorProperty, ArdorAccount, ArdorBalance } from '../../models/ardor.model';
 
 import { ArdorConfig } from '../../config/ardor.config';
 
@@ -12,6 +12,17 @@ export class ArdorAccountService {
 
   public account: ArdorAccount;
   public accProps: Array<ArdorProperty>;
+  private _accBalances: Array<ArdorBalance> = null;
+  get accBalances(): Array<ArdorBalance>{
+    if (this._accBalances === null) {
+      this.getAccountBalances(this.account.accountRS);
+    }else {
+      return this._accBalances;
+    }
+  }
+  set accBalances(value: Array<ArdorBalance>) {
+    this._accBalances = value;
+  }
 
   constructor(private http: Http) { }
 
@@ -66,6 +77,32 @@ export class ArdorAccountService {
           props.push(new ArdorProperty(e.setterRS, e.setter, e.property, e.value));
         });
         this.accProps = props;
+      }),
+      catchError(this.handleErrors)
+    );
+  }
+
+  getAccountBalances(account: string) {
+    // Build query params
+    const uri = new URLSearchParams({
+      requestType: 'getBalance',
+      recipient: account,
+      chain: '1&chain=2&chain=3&chain=4&chain=5'
+    });
+
+    // Send request
+    return this.http.post(
+      ArdorConfig.ApiUrl,
+      uri.toString(),
+      {headers: this.getCommonHeaders()}
+    ).pipe(
+      map(res => res.json()['balances']),
+      map(data => {
+        let props = new Array<ArdorBalance>();
+        Object.keys(data).forEach(key => {
+          props.push(new ArdorBalance(key, data[key]['balanceNQT']));
+        });
+        this.accBalances = props;
       }),
       catchError(this.handleErrors)
     );

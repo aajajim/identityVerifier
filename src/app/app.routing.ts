@@ -4,11 +4,6 @@ import { AuthLayoutComponent } from './shared/components/layouts/auth-layout/aut
 import { AuthGuard } from './shared/services/auth/auth.guard';
 
 export const rootRouterConfig: Routes = [
-  { 
-    path: '',
-    redirectTo: '/sessions/login',
-    pathMatch: 'full'
-  },
   {
     path: '',
     component: AuthLayoutComponent,
@@ -16,19 +11,18 @@ export const rootRouterConfig: Routes = [
       {
         path: 'sessions',
         loadChildren: './views/sessions/sessions.module#SessionsModule',
-        data: { title: 'Session'}
+        data: { title: 'Session', breadcrumb: 'SESSIONS'}
       }
     ]
   },
   {
     path: '',
     component: AdminLayoutComponent,
-    canActivate: [AuthGuard],
     children: [
       {
-        path: 'others', 
-        loadChildren: './views/others/others.module#OthersModule', 
-        data: { title: 'Others', breadcrumb: 'OTHERS'}
+        path: 'profile', 
+        loadChildren: './views/profile/profile.module#ProfileModule', 
+        data: { title: 'Ardor Account', breadcrumb: 'ACCOUNT'}
       }
     ]
   },

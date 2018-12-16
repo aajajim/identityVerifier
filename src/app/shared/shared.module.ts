@@ -68,7 +68,6 @@ import { RoutePartsService } from './services/route-parts.service';
 import { AuthGuard } from './services/auth/auth.guard';
 import { AppConfirmService } from './services/app-confirm/app-confirm.service';
 import { AppLoaderService } from './services/app-loader/app-loader.service';
-import { ArdorAccountService } from './services/ardor/ardor-account.service';
 
 /* 
   Only Required if you want to use Angular Landing

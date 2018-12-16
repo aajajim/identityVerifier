@@ -41,17 +41,13 @@ export class LayoutService {
   setAppLayout() {
     //******** SET YOUR LAYOUT OPTIONS HERE *********
     this.layoutConf = {
-      "navigationPos": "side",    // side, top
-      "sidebarStyle": "full",     // full, compact, closed
-      "dir": "ltr",               // ltr, rtl
-      "useBreadcrumb": true,
-      "topbarFixed": false,
-      "breadcrumb": "title"       // simple, title
+      'navigationPos': 'side',    // side, top
+      'sidebarStyle': 'full',     // full, compact, closed
+      'dir': 'ltr',               // ltr, rtl
+      'useBreadcrumb': true,
+      'topbarFixed': true,
+      'breadcrumb': 'title'       // simple, title
     }
-
-    //******* Only for demo purpose ***
-    this.setLayoutFromQuery();
-    //**********************
   }
 
   publishLayoutChange(lc: ILayoutConf, opt: ILayoutChangeOptions = {}) {
@@ -83,13 +79,12 @@ export class LayoutService {
     this.isMobile = this.isSm();
     this.currentRoute = options.route || this.currentRoute;
     sidebarStyle = this.isMobile ? 'closed' : this.layoutConf.sidebarStyle;
-    
     if (this.currentRoute) {
       this.fullWidthRoutes.forEach(route => {
-        if(this.currentRoute.indexOf(route) !== -1) {
+        if (this.currentRoute.indexOf(route) !== -1) {
           sidebarStyle =  'closed';
         }
-      })
+      });
     }
 
     this.publishLayoutChange({
