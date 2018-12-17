@@ -8,7 +8,7 @@ import { ArdorAccountService } from 'app/shared/services/ardor/ardor-account.ser
   styleUrls: ['./app-ardor-account.component.css']
 })
 export class AppArdorAccountComponent implements OnInit {
-  photoUrl: string; 
+  photoUrl: string;
   account: ArdorAccount;
 
   constructor(private ardorAS: ArdorAccountService) {

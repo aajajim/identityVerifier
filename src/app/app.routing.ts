@@ -20,14 +20,14 @@ export const rootRouterConfig: Routes = [
     component: AdminLayoutComponent,
     children: [
       {
-        path: 'profile', 
-        loadChildren: './views/profile/profile.module#ProfileModule', 
+        path: 'profile',
+        loadChildren: './views/profile/profile.module#ProfileModule',
         data: { title: 'Ardor Account', breadcrumb: 'ACCOUNT'}
       }
     ]
   },
-  { 
-    path: '**', 
+  {
+    path: '**',
     redirectTo: 'sessions/404'
   }
 ];

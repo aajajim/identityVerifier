@@ -24,8 +24,8 @@ export class ArdorBalance {
     public chainLogo: string;
 
     constructor(
-        public chainId: string,
-        public chainBalance: string
+        chainId: string,
+        chainBalance: string
     ) {
         switch (chainId) {
             case '1': {

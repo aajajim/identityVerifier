@@ -14,8 +14,11 @@ export class ArdorAccountService {
   public accProps: Array<ArdorProperty>;
   private _accBalances: Array<ArdorBalance> = null;
   get accBalances(): Array<ArdorBalance>{
-    if (this._accBalances === null) {
-      this.getAccountBalances(this.account.accountRS);
+    if (this._accBalances === null && this.account !== null) {
+      this.getAccountBalances(this.account.accountRS).subscribe(
+        (res) => { return; },
+        (err) => { console.log(err); }
+      );
     }else {
       return this._accBalances;
     }
@@ -72,7 +75,7 @@ export class ArdorAccountService {
     ).pipe(
       map(res => res.json()['properties']),
       map(data => {
-        let props = new Array<ArdorProperty>();
+        let props = [];
         data.forEach(e => {
           props.push(new ArdorProperty(e.setterRS, e.setter, e.property, e.value));
         });
@@ -85,24 +88,25 @@ export class ArdorAccountService {
   getAccountBalances(account: string) {
     // Build query params
     const uri = new URLSearchParams({
-      requestType: 'getBalance',
-      recipient: account,
-      chain: '1&chain=2&chain=3&chain=4&chain=5'
+      requestType: 'getBalances',
+      account: account,
+      chain: '1'
     });
-
     // Send request
     return this.http.post(
       ArdorConfig.ApiUrl,
       uri.toString(),
       {headers: this.getCommonHeaders()}
     ).pipe(
-      map(res => res.json()['balances']),
+      map(res => {
+        return res.json()['balances'];
+      }),
       map(data => {
-        let props = new Array<ArdorBalance>();
+        let props = [];
         Object.keys(data).forEach(key => {
           props.push(new ArdorBalance(key, data[key]['balanceNQT']));
         });
-        this.accBalances = props;
+        this._accBalances = props;
       }),
       catchError(this.handleErrors)
     );

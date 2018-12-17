@@ -6,14 +6,12 @@
         <img src="assets/images/sq-face-220.jpg" alt="">
       </div>
       <div class="profile-title text-center mb-1">
-        <div class="main-title">Jhone <b>Doe</b></div>
-        <div class="subtitle mb-05">Big Data Expert</div>
-        <div class="text-muted">Hi I'm Jhone, sit amet consectetur adipisicing elit. Aperiam repellendus nam perspiciatis.</div>
+        <div class="main-title"><b>{{profileAccount.name}}</b></div>
+        <div class="subtitle mb-05">{{profileAccount.accountRS}}</div>
+        <div class="text-muted">{{profileAccount.description}}</div>
       </div>
       <div class="profile-actions mb-1" fxLayoutAlign="center center">
         <button mat-raised-button color="primary">Message</button>
-        <span fxFlex="8px"></span>
-        <button mat-raised-button color="accent">Follow</button>
       </div>
       <div class="profile-nav">
         <mat-nav-list>

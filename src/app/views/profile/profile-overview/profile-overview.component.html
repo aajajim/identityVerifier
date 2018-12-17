@@ -6,11 +6,11 @@
           <mat-card-content class="p-0">
             <mat-list class="compact-list mb-1">
               <mat-list-item class="" *ngFor="let t of balances">
-                <img mat-list-avatar class="mr-1" [src]="t.logo" alt="">
+                <img mat-list-avatar class="mr-1" [src]="t.chainLogo" alt="">
                 <div fxLayout="row" fxFlex="100">
-                  <h6 class="m-0 mr-1">{{t.name}}</h6>
+                  <h6 class="m-0 mr-1">{{t.chainName}}</h6>
                   <span fxFlex></span>
-                  <p class="mr-1 ml-1">{{t.amount}}</p>
+                  <p class="mr-1 ml-1">{{t.chainAmount}}</p>
                 </div>
               </mat-list-item>
             </mat-list>
