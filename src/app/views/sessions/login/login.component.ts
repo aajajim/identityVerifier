@@ -40,8 +40,8 @@ export class LoginComponent implements OnInit {
     const acc = loginData['ardrAccount'];
     this.ardrAS.getAccount(acc).subscribe(
       (res) => {
-        if (res.publicKey !== 'undefined') {
-          this.router.navigate(['profile']);
+        if (res.publicKey !== undefined) {
+          this.router.navigate(['profile/overview']);
         }else {
           this.loginForm.reset();
           this.errorOnAccount = true;

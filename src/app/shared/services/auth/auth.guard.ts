@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ArdorAccountService } from '../ardor/ardor-account.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   public authToken;
-  private isAuthenticated = true; // Set this value dynamically
   
-  constructor(private router: Router) {}
+  constructor(private router: Router, private ardorAS: ArdorAccountService) {}
+
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (this.isAuthenticated) {
-      return true;
+    if ((this.ardorAS.account === undefined)) {
+      this.router.navigate(['/sessions/login']);
+      return false;
     }
-    this.router.navigate(['/sessions/login']);
-    return false;
+    return true;
   }
 }

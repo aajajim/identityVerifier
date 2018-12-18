@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ArdorAccountService } from 'app/shared/services/ardor/ardor-account.service';
+import { ArdorBalance, ArdorProperty } from 'app/shared/models/ardor.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-overview',
@@ -34,76 +36,24 @@ export class ProfileOverviewComponent implements OnInit {
     closed: 60
   }];
 
-  tasks = [{
-    text: 'Lorem, ipsum dolor sit amet',
-    status: 0
-  }, {
-    text: 'Lorem, ipsum dolor sit amet',
-    status: 0
-  }, {
-    text: 'Lorem, ipsum dolor sit amet',
-    status: 1
-  }, {
-    text: 'Lorem, ipsum dolor sit amet',
-    status: 1
-  }, {
-    text: 'Lorem, ipsum dolor sit amet',
-    status: 1
-  }]
+  balances: Array<ArdorBalance>;
+  verifiedAccounts: Array<ArdorProperty>;
 
-  /*balances = [{
-    logo: 'assets/images/childchains/ardor_logo.jpg',
-    name: 'Ardor',
-    amount: 12564.23,
-    lastTx: new Date('07/12/2017')
-  }, {
-    logo: 'assets/images/childchains/ignis_logo.jpg',
-    name: 'Ignis',
-    amount: 12561.25,
-    lastTx: new Date('07/7/2017')
-  }, {
-    logo: 'assets/images/childchains/aeur_logo.jpg',
-    name: 'Ardor Gate',
-    amount: 6535.12,
-    lastTx: new Date('04/10/2017')
-  }, {
-    logo: 'assets/images/childchains/bits_logo.jpg',
-    name: 'Bitswift',
-    amount: 1243.12,
-    lastTx: new Date('07/7/2017')
-  }, {
-    logo: 'assets/images/childchains/mpg_logo.jpg',
-    name: 'Max Property Group',
-    amount: 4236.65,
-    lastTx: new Date('04/10/2017')
-  }];*/
-
-  photos = [{
-    name: 'Photo 1',
-    url: 'assets/images/sq-15.jpg'
-  }, {
-    name: 'Photo 2',
-    url: 'assets/images/sq-8.jpg'
-  }, {
-    name: 'Photo 3',
-    url: 'assets/images/sq-9.jpg'
-  }, {
-    name: 'Photo 4',
-    url: 'assets/images/sq-10.jpg'
-  }, {
-    name: 'Photo 5',
-    url: 'assets/images/sq-11.jpg'
-  }, {
-    name: 'Photo 6',
-    url: 'assets/images/sq-12.jpg'
-  }]
-
-  balances = [];
-  
-  constructor(private ardorAS: ArdorAccountService) { }
+  constructor(
+    private router: Router,
+    private ardorAS: ArdorAccountService) { }
 
   ngOnInit() {
-    this.balances = this.ardorAS.accBalances;
+    if (this.ardorAS.account !== undefined ) {
+      this.ardorAS.getAccountBalances(this.ardorAS.account.accountRS).subscribe(
+        (res) => { this.balances = res; },
+        (err) => { console.log(err) ; }
+      );
+      this.ardorAS.getAccountProperties(this.ardorAS.account.accountRS).subscribe(
+        (res) => { this.verifiedAccounts = res; },
+        (err) => { console.log(err) ; }
+      );
+    }
   }
 
 }

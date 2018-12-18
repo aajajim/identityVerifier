@@ -12,20 +12,7 @@ export class ArdorAccountService {
 
   public account: ArdorAccount;
   public accProps: Array<ArdorProperty>;
-  private _accBalances: Array<ArdorBalance> = null;
-  get accBalances(): Array<ArdorBalance>{
-    if (this._accBalances === null && this.account !== null) {
-      this.getAccountBalances(this.account.accountRS).subscribe(
-        (res) => { return; },
-        (err) => { console.log(err); }
-      );
-    }else {
-      return this._accBalances;
-    }
-  }
-  set accBalances(value: Array<ArdorBalance>) {
-    this._accBalances = value;
-  }
+  public accBalances: Array<ArdorBalance>;
 
   constructor(private http: Http) { }
 
@@ -60,11 +47,12 @@ export class ArdorAccountService {
     );
   }
 
-  getAccountProperties(account: string, setBy: string= '') {
+  getAccountProperties(account: string): Observable<Array<ArdorProperty>> {
     // Build query params
     const uri = new URLSearchParams({
       requestType: 'getAccountProperties',
-      recipient: account
+      recipient: account,
+      setter: ArdorConfig.IdVerfierContract
     });
 
     // Send request
@@ -77,21 +65,26 @@ export class ArdorAccountService {
       map(data => {
         let props = [];
         data.forEach(e => {
-          props.push(new ArdorProperty(e.setterRS, e.setter, e.property, e.value));
+          props.push(new ArdorProperty(e.setterRS, e.setter, e.property, e.value, true));
         });
         this.accProps = props;
+        return props;
       }),
       catchError(this.handleErrors)
     );
   }
 
-  getAccountBalances(account: string) {
+  getAccountBalances(account: string): Observable<Array<ArdorBalance>> {
     // Build query params
     const uri = new URLSearchParams({
       requestType: 'getBalances',
       account: account,
       chain: '1'
     });
+    uri.append('chain', '2');
+    uri.append('chain', '3');
+    uri.append('chain', '4');
+    uri.append('chain', '5');
     // Send request
     return this.http.post(
       ArdorConfig.ApiUrl,
@@ -102,11 +95,12 @@ export class ArdorAccountService {
         return res.json()['balances'];
       }),
       map(data => {
-        let props = [];
+        let props = new Array<ArdorBalance>();
         Object.keys(data).forEach(key => {
           props.push(new ArdorBalance(key, data[key]['balanceNQT']));
         });
-        this._accBalances = props;
+        this.accBalances = props;
+        return props;
       }),
       catchError(this.handleErrors)
     );
@@ -122,8 +116,8 @@ export class ArdorAccountService {
   }
 
   handleErrors(error: Response) {
-    console.log(JSON.stringify(error.json()));
-    return Observable.throw(error);
+    console.log(error);
+     return Observable.throw(error);
   }
   //#endregion
 }

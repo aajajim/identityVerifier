@@ -1,52 +1,103 @@
 <mat-card class="p-0">
   <mat-tab-group>
-    <mat-tab label="Account Settings">
+    <mat-tab label="Account Verification">
       <mat-card-content class="mt-1">
-          <form>
-            <mat-form-field class="full-width">
-              <input
-              matInput
-              name="name"
-              placeholder="Name"
-              value="">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-                <input
-                matInput
-                name="title"
-                placeholder="Title"
-                value="">
-              </mat-form-field>
-            <mat-form-field class="full-width">
-              <input
-              matInput
-              name="email"
-              placeholder="Email"
-              value="">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-              <input
-              matInput
-              name="phone"
-              placeholder="Phone"
-              value="">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-              <input
-              matInput
-              name="address"
-              placeholder="Adresss"
-              value="">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-              <input
-              matInput
-              name="website"
-              placeholder="Website"
-              value="">
-            </mat-form-field>
-            <button mat-raised-button color="primary">Save</button>
-          </form>
+        <mat-horizontal-stepper [linear]="true">
+          <mat-step [stepControl]="tokenFormGroup">
+            <form [formGroup]="tokenFormGroup">
+              <ng-template matStepLabel>Request a challenge token</ng-template>
+              <div fxLayout="column" >
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                    <mat-label>Ardor Contract Account</mat-label>
+                    <input 
+                    matInput 
+                    placeholder="Ardor Contract Account" 
+                    [formControl]="tokenFormGroup.controls['contractAccount']"
+                    [value]="contractAccount"
+                    required>
+                  </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                    <mat-label>Challenge token</mat-label>
+                    <textarea 
+                    matInput 
+                    placeholder="Challenge token" 
+                    [formControl]="tokenFormGroup.controls['challengeToken']"
+                    [value]="tokenValue"
+                    required></textarea>
+                  </mat-form-field>
+                  <button mat-raised-button class="mat-accent full-width mb-1" (click)="getChallengeToken()">Request Challenge</button>
+              </div>
+              <div>
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step [stepControl]="signingFormGroup">
+            <form [formGroup]="signingFormGroup">
+              <ng-template matStepLabel>Sign the challenge token</ng-template>
+              <div fxLayout="column">
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>My Ardor Account</mat-label>
+                      <input 
+                      matInput 
+                      placeholder="My Ardor Account" 
+                      [formControl]="signingFormGroup.controls['myAccount']"
+                      [value]="myAccount"
+                      required>
+                  </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>Challenge token</mat-label>
+                      <textarea 
+                      matInput 
+                      placeholder="Challenge token" 
+                      [formControl]="signingFormGroup.controls['challengeToken']"
+                      [value]="tokenValue"
+                      required></textarea>
+                    </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>My Passphrase</mat-label>
+                      <input 
+                      matInput 
+                      placeholder="My Passphrase" 
+                      [formControl]="signingFormGroup.controls['myPassphrase']"
+                      required>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="isSigned" class="full-width pt-1"  appearance="outline">
+                      <mat-label>Signed token</mat-label>
+                      <textarea 
+                      matInput 
+                      placeholder="Signed token" 
+                      [formControl]="signingFormGroup.controls['signedToken']"
+                      [value]="signedToken"
+                      required></textarea>
+                    </mat-form-field>
+                    <button mat-raised-button class="mat-accent full-width mb-1" (click)="signToken()">Sign Token</button>
+              </div>
+              
+
+
+              <div fxLayout="row">
+                <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+                <span fxFlex="8px"></span>
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Done</ng-template>
+            <div>
+              <mat-icon class="pt-1" [style.fontSize]="'36px'">check</mat-icon>
+            </div>
+            <div class="pb-1 mb-1"> You Are Done.</div>
+            <div fxLayout="row">
+              <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+              <span fxFlex="8px"></span>
+              <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
       </mat-card-content>
     </mat-tab>
     <mat-tab label="Profile Picture">

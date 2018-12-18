@@ -10,11 +10,25 @@ export class ArdorAccount {
 }
 
 export class ArdorProperty {
+    public faviconUrl: string;
+    public verifiedAcc: string;
+    public verifiedAccUrl: string;
+
     constructor(
         public setterRS: string,
         public setter: string,
         public property: string,
-        public value: string) {}
+        public value: string,
+        public status: boolean) {
+            try {
+                const val = JSON.parse(value);
+                if (Object.keys(val).includes('verifiedAccount')) {
+                    this.verifiedAcc = val.get('verifiedAccount');
+                    this.faviconUrl = 'https://www.google.com/s2/favicons?domain=' + this.verifiedAcc;
+                    this.verifiedAccUrl = val.get('verificationUrl');
+                }
+            } catch (e) {}
+        }
 }
 
 export class ArdorBalance {
@@ -45,7 +59,7 @@ export class ArdorBalance {
                 break;
             }
             case '5': {
-                this.setProperties('Max Property Group', 'MGP', chainBalance, 'mgp_logo.jpg');
+                this.setProperties('Max Property Group', 'MGP', chainBalance, 'mpg_logo.jpg');
                 break;
             }
             default: {
@@ -59,7 +73,7 @@ export class ArdorBalance {
     setProperties(name: string, symbol: string, amount: string, logo: string) {
         this.chainName = name;
         this.chainSymbol = symbol;
-        this.chainAmount = parseInt(amount);
-        this.chainLogo = logo;
+        this.chainAmount = parseInt(amount, 10) / 100000000;
+        this.chainLogo = '/assets/images/childchains/' + logo;
     }
 }

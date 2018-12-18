@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { 
   MatListModule,
   MatIconModule,
@@ -15,7 +15,8 @@ import {
   MatRadioModule,
   MatTabsModule,
   MatInputModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatStepperModule
  } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -26,13 +27,13 @@ import { SharedModule } from '../../shared/shared.module';
 import { ProfileComponent } from './profile.component';
 import { ProfileOverviewComponent } from './profile-overview/profile-overview.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
-import { ProfileBlankComponent } from './profile-blank/profile-blank.component';
 import { ProfileRoutes } from './profile.routing';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatListModule,
     MatIconModule,
     MatButtonModule,
@@ -46,6 +47,7 @@ import { ProfileRoutes } from './profile.routing';
     MatTabsModule,
     MatInputModule,
     MatProgressBarModule,
+    MatStepperModule,
     FlexLayoutModule,
     NgxDatatableModule,
     ChartsModule,
@@ -53,6 +55,6 @@ import { ProfileRoutes } from './profile.routing';
     SharedModule,
     RouterModule.forChild(ProfileRoutes)
   ],
-  declarations: [ProfileComponent, ProfileOverviewComponent, ProfileSettingsComponent, ProfileBlankComponent]
+  declarations: [ProfileComponent, ProfileOverviewComponent, ProfileSettingsComponent]
 })
 export class ProfileModule { }
