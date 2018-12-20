@@ -85,6 +85,56 @@
             </form>
           </mat-step>
 
+          <mat-step [stepControl]="publishingFormGroup">
+            <form [formGroup]="publishingFormGroup">
+              <ng-template matStepLabel>Sign the challenge token</ng-template>
+              <div fxLayout="column">
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>My Ardor Account</mat-label>
+                      <input 
+                      matInput 
+                      placeholder="My Ardor Account" 
+                      [formControl]="publishingFormGroup.controls['myAccount']"
+                      [value]="myAccount"
+                      required>
+                  </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>Challenge token</mat-label>
+                      <textarea 
+                      matInput 
+                      placeholder="Challenge token" 
+                      [formControl]="publishingFormGroup.controls['challengeToken']"
+                      [value]="tokenValue"
+                      required></textarea>
+                    </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>Signed token</mat-label>
+                      <textarea 
+                      matInput 
+                      placeholder="Signed token" 
+                      [formControl]="publishingFormGroup.controls['signedToken']"
+                      [value]="signedToken"
+                      required></textarea>
+                    </mat-form-field>
+                    <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>Public URL</mat-label>
+                      <textarea 
+                      matInput 
+                      placeholder="Public url where signed token has been published" 
+                      [formControl]="publishingFormGroup.controls['publicUrl']"
+                      [value]="publicUrl"
+                      required></textarea>
+                    </mat-form-field>
+                    <button mat-raised-button class="mat-accent full-width mb-1" (click)="sendToContract()">Send to contract for verification</button>
+              </div>
+              <div fxLayout="row">
+                <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+                <span fxFlex="8px"></span>
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+
           <mat-step>
             <ng-template matStepLabel>Done</ng-template>
             <div>

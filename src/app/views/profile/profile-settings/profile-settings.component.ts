@@ -12,14 +12,16 @@ import { ArdorAccountService } from 'app/shared/services/ardor/ardor-account.ser
 export class ProfileSettingsComponent implements OnInit {
   tokenFormGroup: FormGroup;
   signingFormGroup: FormGroup;
+  publishingFormGroup: FormGroup;
 
   public uploader: FileUploader = new FileUploader({ url: 'upload_url' });
   public hasBaseDropZoneOver = false;
   tokenValue: string;
   signedToken: string;
-  isSigned: boolean = false;
+  isSigned = false;
   contractAccount: string;
   myAccount: string;
+  publicUrl: string;
 
   constructor(
     private fb: FormBuilder,
@@ -30,6 +32,8 @@ export class ProfileSettingsComponent implements OnInit {
     this.signedToken = '';
     this.contractAccount = ArdorConfig.IdVerfierContract;
     this.myAccount = this.ardorAS.account.accountRS;
+    this.publicUrl = '';
+
     this.tokenFormGroup = this.fb.group({
       challengeToken: ['', Validators.required],
       contractAccount: [{value: this.contractAccount, disabled: true}, Validators.required]
@@ -39,6 +43,12 @@ export class ProfileSettingsComponent implements OnInit {
       challengeToken: [{value: this.tokenValue, disabled: true}, Validators.required],
       myPassphrase: ['', Validators.required],
       signedToken: ['', Validators.required],
+    });
+    this.publishingFormGroup = this.fb.group({
+      myAccount: [{value: this.myAccount, disabled: true}, Validators.required],
+      challengeToken: [{value: this.tokenValue, disabled: true}, Validators.required],
+      signedToken: [{value: this.signToken, disabled: true}, Validators.required],
+      publicUrl: ['', Validators.required],
     });
   }
 
@@ -51,7 +61,15 @@ export class ProfileSettingsComponent implements OnInit {
     this.tokenFormGroup.controls['challengeToken'].setValue(this.tokenValue);
   }
 
-  signToken(){
+  signToken() {
+    if ( this.signingFormGroup.controls['myPassphrase'].value !== undefined ) {
+      this.signedToken = 'dfsdgfds';
+      this.signingFormGroup.controls['signedToken'].setValue('dfsdgfds');
+      this.isSigned = true;
+    }
+  }
 
+  sendToContract() {
+    console.log('Send to Contract');
   }
 }
