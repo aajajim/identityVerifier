@@ -106,7 +106,7 @@
                       [formControl]="publishingFormGroup.controls['challengeToken']"
                       [value]="tokenValue"
                       required></textarea>
-                    </mat-form-field>
+                  </mat-form-field>
                   <mat-form-field class="full-width pt-1"  appearance="outline">
                       <mat-label>Signed token</mat-label>
                       <textarea 
@@ -115,17 +115,26 @@
                       [formControl]="publishingFormGroup.controls['signedToken']"
                       [value]="signedToken"
                       required></textarea>
-                    </mat-form-field>
-                    <mat-form-field class="full-width pt-1"  appearance="outline">
-                      <mat-label>Public URL</mat-label>
-                      <textarea 
-                      matInput 
-                      placeholder="Public url where signed token has been published" 
-                      [formControl]="publishingFormGroup.controls['publicUrl']"
-                      [value]="publicUrl"
-                      required></textarea>
-                    </mat-form-field>
-                    <button mat-raised-button class="mat-accent full-width mb-1" (click)="sendToContract()">Send to contract for verification</button>
+                  </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                    <mat-label>Public URL</mat-label>
+                    <textarea 
+                    matInput 
+                    placeholder="Public url where signed token has been published" 
+                    [formControl]="publishingFormGroup.controls['publicUrl']"
+                    [value]="publicUrl"
+                    required></textarea>
+                  </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                    <mat-label>Fee in IGNIS (minimum is {{minimalFee}})</mat-label>
+                    <input
+                    matInput 
+                    placeholder="Necessary fee for the contract to set a new property" 
+                    [formControl]="publishingFormGroup.controls['propertyFee']"
+                    [value]="minimalFee"
+                    required>
+                  </mat-form-field>
+                  <button mat-raised-button class="mat-accent full-width mb-1" (click)="sendToContract()">Send to contract for verification</button>
               </div>
               <div fxLayout="row">
                 <button mat-raised-button color="accent" matStepperPrevious>Back</button>

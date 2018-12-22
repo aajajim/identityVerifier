@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.errorOnAccount = false;
+    this.ardrAS.clearCaches();
     this.loginForm = new FormGroup({
       ardrAccount: new FormControl('', Validators.required),
       rememberMe: new FormControl(false)

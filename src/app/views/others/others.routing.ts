@@ -7,12 +7,10 @@ import { AppBlankComponent } from './app-blank/app-blank.component';
 import { Nested1Component } from './nested1/nested1.component';
 import { Nested2Component } from './nested2/nested2.component';
 import { Nested3Component } from './nested3/nested3.component';
-import { AppArdorAccountComponent } from './app-ardor-account/app-ardor-account.component';
-
 export const OthersRoutes: Routes = [
   {
     path: '',
-    component: AppArdorAccountComponent,
-    data: { title: 'Ardor Account', breadcrumb: 'ACCOUNT' }
+    component: AppBlankComponent,
+    data: { title: 'Blank', breadcrumb: 'BLANK' }
   }
 ];

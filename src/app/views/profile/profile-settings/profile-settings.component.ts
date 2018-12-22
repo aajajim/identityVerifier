@@ -22,6 +22,7 @@ export class ProfileSettingsComponent implements OnInit {
   contractAccount: string;
   myAccount: string;
   publicUrl: string;
+  minimalFee: number;
 
   constructor(
     private fb: FormBuilder,
@@ -33,6 +34,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.contractAccount = ArdorConfig.IdVerfierContract;
     this.myAccount = this.ardorAS.account.accountRS;
     this.publicUrl = '';
+    this.minimalFee = ArdorConfig.PropertyFee;
 
     this.tokenFormGroup = this.fb.group({
       challengeToken: ['', Validators.required],
@@ -47,8 +49,9 @@ export class ProfileSettingsComponent implements OnInit {
     this.publishingFormGroup = this.fb.group({
       myAccount: [{value: this.myAccount, disabled: true}, Validators.required],
       challengeToken: [{value: this.tokenValue, disabled: true}, Validators.required],
-      signedToken: [{value: this.signToken, disabled: true}, Validators.required],
+      signedToken: [{value: this.signedToken, disabled: true}, Validators.required],
       publicUrl: ['', Validators.required],
+      propertyFee: [{value: this.minimalFee, disabled: false}, Validators.min(this.minimalFee)]
     });
   }
 

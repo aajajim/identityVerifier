@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ArdorAccountService } from 'app/shared/services/ardor/ardor-account.service';
 import { ArdorBalance, ArdorProperty } from 'app/shared/models/ardor.model';
 import { Router } from '@angular/router';
@@ -36,8 +37,8 @@ export class ProfileOverviewComponent implements OnInit {
     closed: 60
   }];
 
-  balances: Array<ArdorBalance>;
-  verifiedAccounts: Array<ArdorProperty>;
+  balances: Observable<Array<ArdorBalance>>;
+  verifiedAccounts: Observable<Array<ArdorProperty>>;
 
   constructor(
     private router: Router,
@@ -45,14 +46,8 @@ export class ProfileOverviewComponent implements OnInit {
 
   ngOnInit() {
     if (this.ardorAS.account !== undefined ) {
-      this.ardorAS.getAccountBalances(this.ardorAS.account.accountRS).subscribe(
-        (res) => { this.balances = res; },
-        (err) => { console.log(err) ; }
-      );
-      this.ardorAS.getAccountProperties(this.ardorAS.account.accountRS).subscribe(
-        (res) => { this.verifiedAccounts = res; },
-        (err) => { console.log(err) ; }
-      );
+      this.balances = this.ardorAS.accBalances;
+      this.verifiedAccounts = this.ardorAS.accProps;
     }
   }
 
