@@ -11,18 +11,18 @@ import { ArdorConfig } from '../../config/ardor.config';
 export class ArdorContractService {
 
     constructor(private http: HttpClient) {
- 
+
     }
 
 
     generateToken(): string {
-        //Call the contract to receive a token
+        // Call the contract to receive a token
         return 'Hello Token';
     }
 
     verifyAccount(msg: JSON) {
-        //Send money with msg
-        let res = [];
+        // Send money with msg
+        const res = [];
         res.push('verified', 'true');
         res.push('domain', 'twitter.com');
         return res;

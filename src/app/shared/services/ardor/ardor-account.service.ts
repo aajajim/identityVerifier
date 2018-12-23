@@ -59,7 +59,7 @@ export class ArdorAccountService {
 
   getAccountProperties(account: string): Observable<Array<ArdorProperty>> {
     // Build query params
-    //setter: ArdorConfig.IdVerfierContract
+    // setter: ArdorConfig.IdVerfierContract
     const uri = new URLSearchParams({
       requestType: 'getAccountProperties',
       recipient: account
@@ -117,19 +117,19 @@ export class ArdorAccountService {
    */
   private handleErrors<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-  
+
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
-  
+
       // TODO: better job of transforming error for user consumption
       console.log(`${operation} failed: ${error.message}`);
-  
+
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 
-  clearCaches(){
+  clearCaches() {
     this.accBalancesCache = null;
     this.accPropsCache = null;
   }
