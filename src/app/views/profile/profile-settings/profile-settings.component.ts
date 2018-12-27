@@ -31,7 +31,7 @@ export class ProfileSettingsComponent implements OnInit {
   ngOnInit() {
     this.tokenValue = '';
     this.signedToken = '';
-    this.contractAccount = ArdorConfig.IdVerfierContract;
+    this.contractAccount = ArdorConfig.IdVerifierContractAdress;
     this.myAccount = this.ardorAS.account.accountRS;
     this.publicUrl = '';
     this.minimalFee = ArdorConfig.PropertyFee;

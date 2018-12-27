@@ -26,6 +26,7 @@
     "@angular/platform-browser": "7.0.4",
     "@angular/platform-browser-dynamic": "7.0.4",
     "@angular/router": "7.0.4",
+    "ardorjs": "git+https://github.com/mrv777/ardorjs.git",
     "@ngu/carousel": "1.5.4",
     "@ngx-translate/core": "10.0.1",
     "@ngx-translate/http-loader": "3.0.1",

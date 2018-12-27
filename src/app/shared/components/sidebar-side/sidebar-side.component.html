@@ -2,28 +2,28 @@
   <div id="scroll-area" [perfectScrollbar] class="navigation-hold" fxLayout="column">
     <!-- App Logo -->
     <div class="branding default-bg">
-      <img src="assets/images/logo.png" alt="" class="app-logo">
+      <img src="assets/images/Ardor-logo-text.png" alt="" class="app-logo">
       <!-- Two different logos for dark and light themes -->
-      <img 
-      src="assets/images/logo-text-white.png" 
+      <!--img 
+      src="assets/images/Ardor-logo-text.png" 
       alt="" 
       class="app-logo-text"
       *ngIf="themeService.activatedTheme?.name?.indexOf('dark') !== -1">
       <img 
-      src="assets/images/logo-text.png" 
+      src="assets/images/Ardor-logo-text.png" 
       alt="" 
       class="app-logo-text"
-      *ngIf="themeService.activatedTheme?.name?.indexOf('dark') === -1">
+      *ngIf="themeService.activatedTheme?.name?.indexOf('dark') === -1"-->
     </div>
 
     <!-- Sidebar user -->
     <div class="app-user">
       <div class="app-user-photo">
-        <img src="assets/images/face-7.jpg" alt="">
+        <img src="assets/images/decentralizedIV.jpg" alt="">
       </div>
       <span class="app-user-name mb-05">
         <mat-icon class="icon-xs text-muted">lock</mat-icon> 
-        Watson Joyce
+        <b>{{profileAccount.name}}</b>
       </span>
       <!-- Small buttons -->
       <div class="app-user-controls">

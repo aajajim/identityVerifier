@@ -1,16 +1,17 @@
-# Egret
+# Decentralized Identity Verifier
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli).
+This project is a response to the [Ardor Online Hackathon](https://www.jelurida.com/ardor-hackathon-2018) and it deals with the Identity Verification Challenge.
 
 # Doc
 
 [Egret Doc](http://egret-doc.mhrafi.com/)
 
-## Development server
+## Web application
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This repo represents the web application that manages the interactions with Ardor blockchain.
 
-## Code scaffolding
+
+## LightWeight Contracts
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
 

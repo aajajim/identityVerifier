@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { NavigationService } from "../../../shared/services/navigation.service";
 import { ThemeService } from '../../services/theme.service';
 import { Subscription } from "rxjs";
+import { ArdorAccountService } from '../../services/ardor/ardor-account.service';
+import { ArdorAccount } from 'app/shared/models/ardor.model';
+
 // import PerfectScrollbar from 'perfect-scrollbar';
 
 @Component({
@@ -14,9 +17,12 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
   public hasIconTypeMenuItem: boolean;
   public iconTypeMenuTitle: string;
   private menuItemsSub: Subscription;
+  profileAccount: ArdorAccount;
+
   constructor(
     private navService: NavigationService,
     public themeService: ThemeService,
+    private ardorAS: ArdorAccountService
   ) { }
 
   ngOnInit() {
@@ -26,6 +32,7 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
       //Checks item list has any icon type.
       this.hasIconTypeMenuItem = !!this.menuItems.filter(item => item.type === 'icon').length;
     });
+    this.profileAccount = this.ardorAS.account;
   }
   ngAfterViewInit() {
     // setTimeout(() => {
