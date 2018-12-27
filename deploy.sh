@@ -19,7 +19,7 @@ Options:
 
 
 run_build() {
-  ng build --environment=prod
+  ng build --prod
 }
 
 parse_args() {

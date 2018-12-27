@@ -75,4 +75,8 @@ export class ProfileSettingsComponent implements OnInit {
   sendToContract() {
     console.log('Send to Contract');
   }
+
+  submit(){
+    console.log('submit button clicked');
+  }
 }
