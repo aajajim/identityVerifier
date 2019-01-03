@@ -117,6 +117,6 @@ export class ArdorTransaction {
         this.timestamp = js.timestamp ;
         this.fullHash = js.fullHash ;
         this.confirmations = js.confirmations ;
-        this.attachment = JSON.parse(js.attachment);
+        this.attachment = JSON.parse(JSON.stringify(js.attachment));
     }
 }

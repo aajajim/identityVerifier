@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, concat } from 'rxjs';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
-import { catchError, map, shareReplay, merge } from 'rxjs/operators';
+import { catchError, map, shareReplay, switchMap  } from 'rxjs/operators';
+import { timer } from 'rxjs/observable/timer';
 
 import { ArdorProperty, ArdorAccount, ArdorBalance, ArdorTransaction } from '../../models/ardor.model';
 
 import { ArdorConfig } from '../../config/ardor.config';
+
+const BUFFER_ZISE = 1;
+const REFRESH_INTERVAL = 10000;
 
 @Injectable()
 export class ArdorAccountService {
@@ -20,20 +24,25 @@ export class ArdorAccountService {
   //#region Properties
   get accProps(){
     if (!this.accPropsCache) {
-      this.accPropsCache = this.getAccountProperties(this.account.accountRS).pipe(shareReplay(1));
+      this.accPropsCache = this.getAccountProperties(this.account.accountRS).pipe(shareReplay(BUFFER_ZISE));
     }
     return this.accPropsCache;
   }
 
   get accBalances(){
     if (!this.accBalancesCache) {
-      this.accBalancesCache = this.getAccountBalances(this.account.accountRS).pipe(shareReplay(1));
+      this.accBalancesCache = this.getAccountBalances(this.account.accountRS).pipe(shareReplay(BUFFER_ZISE));
     }
     return this.accBalancesCache;
   }
   get accTransactions(){
-    if(!this.accTransactionsCache){
-      this.accTransactionsCache = this.getAccountTransactions(this.account.accountRS).pipe(shareReplay(1));
+    if (!this.accTransactionsCache) {
+      /*const timer$ = timer(0, REFRESH_INTERVAL);
+      this.accTransactionsCache = timer$.pipe(
+        switchMap(_ => this.getAccountTransactions(this.account.accountRS)),
+        shareReplay(BUFFER_ZISE)
+      );*/
+      this.accTransactionsCache = this.getAccountTransactions(this.account.accountRS).pipe(shareReplay(BUFFER_ZISE));
     }
     return this.accTransactionsCache;
   }
@@ -108,17 +117,18 @@ export class ArdorAccountService {
     );
   }
 
-  getAccountTransactions(account: string) {
-        // Build query params
+  getAccountTransactions(account: string): Observable<Array<ArdorTransaction>> {
+    // Build query params
     // setter: ArdorConfig.IdVerfierContract
-    let uri = new URLSearchParams({
-      requestType: 'getExecutedTransactions',
-      recipient: account
-    });
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
 
     // Send request
-    let received = this.http.post<Array<ArdorTransaction>>(
+    let uri = new URLSearchParams({
+      requestType: 'getExecutedTransactions',
+      chain: '2',
+      recipient: account
+    });
+    const received = this.http.post<Array<ArdorTransaction>>(
       ArdorConfig.ApiUrl,
       uri.toString(),
       {headers: headers}
@@ -126,12 +136,13 @@ export class ArdorAccountService {
       map(res => res['transactions'].map(e => new ArdorTransaction(e))),
       catchError(this.handleErrors<Array<ArdorTransaction>>('getAcccountTransactions', []))
     );
-
+    // Received request
     uri = new URLSearchParams({
       requestType: 'getExecutedTransactions',
+      chain: '2',
       sender: account
     });
-    let sent = this.http.post<Array<ArdorTransaction>>(
+    const sent = this.http.post<Array<ArdorTransaction>>(
       ArdorConfig.ApiUrl,
       uri.toString(),
       {headers: headers}
@@ -139,7 +150,7 @@ export class ArdorAccountService {
       map(res => res['transactions'].map(e => new ArdorTransaction(e))),
       catchError(this.handleErrors<Array<ArdorTransaction>>('getAcccountTransactions', []))
     );
-    return Observable.m
+    return concat(received, sent);
   }
   //#endregion
 
