@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpResponse  } from '@angular/common/http';
-import { catchError, map, tap, shareReplay } from 'rxjs/operators';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
+import { catchError, map, shareReplay, merge } from 'rxjs/operators';
 
-import { ArdorProperty, ArdorAccount, ArdorBalance } from '../../models/ardor.model';
+import { ArdorProperty, ArdorAccount, ArdorBalance, ArdorTransaction } from '../../models/ardor.model';
 
 import { ArdorConfig } from '../../config/ardor.config';
 
@@ -14,6 +14,7 @@ export class ArdorAccountService {
   public account: ArdorAccount;
   private accPropsCache: Observable<Array<ArdorProperty>>;
   private accBalancesCache: Observable<Array<ArdorBalance>>;
+  private accTransactionsCache: Observable<Array<ArdorTransaction>>;
   //#endregion
 
   //#region Properties
@@ -29,6 +30,12 @@ export class ArdorAccountService {
       this.accBalancesCache = this.getAccountBalances(this.account.accountRS).pipe(shareReplay(1));
     }
     return this.accBalancesCache;
+  }
+  get accTransactions(){
+    if(!this.accTransactionsCache){
+      this.accTransactionsCache = this.getAccountTransactions(this.account.accountRS).pipe(shareReplay(1));
+    }
+    return this.accTransactionsCache;
   }
   //#endregion
 
@@ -101,6 +108,39 @@ export class ArdorAccountService {
     );
   }
 
+  getAccountTransactions(account: string) {
+        // Build query params
+    // setter: ArdorConfig.IdVerfierContract
+    let uri = new URLSearchParams({
+      requestType: 'getExecutedTransactions',
+      recipient: account
+    });
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+
+    // Send request
+    let received = this.http.post<Array<ArdorTransaction>>(
+      ArdorConfig.ApiUrl,
+      uri.toString(),
+      {headers: headers}
+    ).pipe(
+      map(res => res['transactions'].map(e => new ArdorTransaction(e))),
+      catchError(this.handleErrors<Array<ArdorTransaction>>('getAcccountTransactions', []))
+    );
+
+    uri = new URLSearchParams({
+      requestType: 'getExecutedTransactions',
+      sender: account
+    });
+    let sent = this.http.post<Array<ArdorTransaction>>(
+      ArdorConfig.ApiUrl,
+      uri.toString(),
+      {headers: headers}
+    ).pipe(
+      map(res => res['transactions'].map(e => new ArdorTransaction(e))),
+      catchError(this.handleErrors<Array<ArdorTransaction>>('getAcccountTransactions', []))
+    );
+    return Observable.m
+  }
   //#endregion
 
   //#region Common Methods

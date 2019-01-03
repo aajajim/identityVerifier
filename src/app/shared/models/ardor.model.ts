@@ -91,3 +91,32 @@ export class ArdorBalance {
         this.chainLogo = '/assets/images/childchains/' + logo;
     }
 }
+
+export class ArdorTransaction {
+    public chain: number;
+    public senderRS: string;
+    public recipientRS: string;
+    public type: number;
+    public subtype: number;
+    public feeNQT: string;
+    public amountNQT: string;
+    public timestamp: number;
+    public fullHash: string;
+    public confirmations: number;
+    public attachment: JSON;
+
+    constructor(tx: Object){
+        const js = JSON.parse(JSON.stringify(tx));
+        this.chain = js.chain;
+        this.senderRS = js.senderRS ;
+        this.recipientRS = js.recipientRS ;
+        this.type = js.type ;
+        this.subtype = js.subtype ;
+        this.feeNQT = js.feeNQT ;
+        this.amountNQT = js.amountNQT ;
+        this.timestamp = js.timestamp ;
+        this.fullHash = js.fullHash ;
+        this.confirmations = js.confirmations ;
+        this.attachment = JSON.parse(js.attachment);
+    }
+}
