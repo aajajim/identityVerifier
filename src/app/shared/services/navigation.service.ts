@@ -30,8 +30,8 @@ export class NavigationService {
     {
       name: 'HOME',
       type: 'icon',
-      tooltip: 'Home',
-      icon: 'home',
+      tooltip: 'Log out',
+      icon: 'exit_to_app',
       state: 'home'
     },
     {
@@ -42,11 +42,11 @@ export class NavigationService {
       state: 'profile/overview'
     },
     {
-      name: 'TOUR',
+      name: 'VERIFY ACCOUNT',
       type: 'icon',
-      tooltip: 'Tour',
-      icon: 'flight_takeoff',
-      state: 'tour'
+      tooltip: 'Verify an account',
+      icon: 'settings',
+      state: 'profile/settings'
     },
     {
       type: 'separator',

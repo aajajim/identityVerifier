@@ -3,6 +3,7 @@ import { FileUploader } from 'ng2-file-upload';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ArdorConfig } from 'app/shared/config/ardor.config';
 import { ArdorAccountService } from 'app/shared/services/ardor/ardor-account.service';
+import { ArdorContractService } from 'app/shared/services/ardor/ardor-contract.service';
 
 @Component({
   selector: 'app-profile-settings',
@@ -23,10 +24,12 @@ export class ProfileSettingsComponent implements OnInit {
   myAccount: string;
   publicUrl: string;
   minimalFee: number;
+  waitResponse = false;
 
   constructor(
     private fb: FormBuilder,
-    private ardorAS: ArdorAccountService) { }
+    private ardorAS: ArdorAccountService,
+    private ardorCS: ArdorContractService) { }
 
   ngOnInit() {
     this.tokenValue = '';
@@ -37,8 +40,9 @@ export class ProfileSettingsComponent implements OnInit {
     this.minimalFee = ArdorConfig.PropertyFee;
 
     this.tokenFormGroup = this.fb.group({
-      challengeToken: ['', Validators.required],
-      contractAccount: [{value: this.contractAccount, disabled: true}, Validators.required]
+      contractAccount: [{value: this.contractAccount, disabled: true}, Validators.required],
+      challengeToken: [{value: '', disabled: true}, Validators.required],
+      myPassphrase: ['', Validators.required]
     });
     this.signingFormGroup = this.fb.group({
       myAccount: [{value: this.myAccount, disabled: false}, Validators.required],
@@ -60,8 +64,24 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   getChallengeToken() {
-    this.tokenValue = 'Hello World Token';
-    this.tokenFormGroup.controls['challengeToken'].setValue(this.tokenValue);
+    const errMsg = 'Error occured while requesting challenge, please try again!';
+    let responeJson: JSON;
+    const passphrase = this.tokenFormGroup.controls['myPassphrase'].value;
+    if (passphrase) {
+      this.waitResponse = true;
+      this.ardorCS.generateToken(this.tokenFormGroup.controls['myPassphrase'].value).subscribe(
+        r => {
+            console.log(r);
+            if (r.length > 0 && r[0].senderRS === ArdorConfig.IdVerifierContractAdress && r[0].attachment !== null) {
+              responeJson = r[0].attachedMessage;
+              this.waitResponse = false;
+            }
+        },
+        e => { responeJson = undefined; }
+      );
+      this.tokenValue = (responeJson !== undefined) ? responeJson[ArdorConfig.ApiChallengeToken] : errMsg;
+      this.tokenFormGroup.controls['challengeToken'].setValue(this.tokenValue);
+    }
   }
 
   signToken() {

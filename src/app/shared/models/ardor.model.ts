@@ -57,37 +57,37 @@ export class ArdorBalance {
         let js = JSON.parse(JSON.stringify(balance));
         switch (chainId) {
             case '1': {
-                this.setProperties('Ardor', 'ARDR', js.balanceNQT, 'ardor_logo.jpg');
+                this.setProperties('Ardor', 'ARDR', js.balanceNQT, 'ardor_logo.jpg', 8);
                 break;
             }
             case '2': {
-                this.setProperties('Ignis', 'IGNIS', js.balanceNQT, 'ignis_logo.jpg');
+                this.setProperties('Ignis', 'IGNIS', js.balanceNQT, 'ignis_logo.jpg', 8);
                 break;
             }
             case '3': {
-                this.setProperties('Ardor Gate', 'AEUR', js.balanceNQT, 'aeur_logo.jpg');
+                this.setProperties('Ardor Gate', 'AEUR', js.balanceNQT, 'aeur_logo.jpg', 4);
                 break;
             }
             case '4': {
-                this.setProperties('Bitswift', 'BITS', js.balanceNQT, 'bits_logo.jpg');
+                this.setProperties('Bitswift', 'BITS', js.balanceNQT, 'bits_logo.jpg', 8);
                 break;
             }
             case '5': {
-                this.setProperties('Max Property Group', 'MGP', js.balanceNQT, 'mpg_logo.jpg');
+                this.setProperties('Max Property Group', 'MGP', js.balanceNQT, 'mpg_logo.jpg', 8);
                 break;
             }
             default: {
-                this.setProperties('NULL', 'NULL', '0', 'null.jpg');
+                this.setProperties('NULL', 'NULL', '0', 'null.jpg', 8);
                 break;
             }
         }
     }
 
 
-    setProperties(name: string, symbol: string, amount: string, logo: string) {
+    setProperties(name: string, symbol: string, amount: string, logo: string, decimals: number) {
         this.chainName = name;
         this.chainSymbol = symbol;
-        this.chainAmount = parseInt(amount, 10) / 100000000;
+        this.chainAmount = parseInt(amount, 10) / 10 ** decimals;
         this.chainLogo = '/assets/images/childchains/' + logo;
     }
 }
@@ -98,25 +98,29 @@ export class ArdorTransaction {
     public recipientRS: string;
     public type: number;
     public subtype: number;
-    public feeNQT: string;
-    public amountNQT: string;
+    public feeNQT: number;
+    public amountNQT: number;
     public timestamp: number;
     public fullHash: string;
     public confirmations: number;
     public attachment: JSON;
+    public attachedMessage: JSON;
 
-    constructor(tx: Object){
+    constructor(tx: Object) {
         const js = JSON.parse(JSON.stringify(tx));
         this.chain = js.chain;
         this.senderRS = js.senderRS ;
         this.recipientRS = js.recipientRS ;
         this.type = js.type ;
         this.subtype = js.subtype ;
-        this.feeNQT = js.feeNQT ;
-        this.amountNQT = js.amountNQT ;
-        this.timestamp = js.timestamp ;
+        this.feeNQT = Number.parseInt(js.feeNQT) / 10 ** 8 ;
+        this.amountNQT = Number.parseInt(js.amountNQT) / 10 ** 8 ;
+        this.timestamp = Number.parseInt(js.timestamp) + 1514300399;
         this.fullHash = js.fullHash ;
-        this.confirmations = js.confirmations ;
+        this.confirmations = (js.confirmation) ? js.confirmation : 0 ;
         this.attachment = JSON.parse(JSON.stringify(js.attachment));
+        if (this.attachment !== undefined  && this.attachment['message'] !== undefined) {
+            this.attachedMessage = this.attachment['message'];
+        }
     }
 }

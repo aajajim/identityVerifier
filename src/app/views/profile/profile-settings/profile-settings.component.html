@@ -3,6 +3,7 @@
     <mat-tab label="Account Verification">
       <mat-card-content class="mt-1">
         <mat-horizontal-stepper [linear]="true">
+
           <mat-step [stepControl]="tokenFormGroup">
             <form [formGroup]="tokenFormGroup">
               <ng-template matStepLabel>Request a challenge token</ng-template>
@@ -17,6 +18,15 @@
                     required>
                   </mat-form-field>
                   <mat-form-field class="full-width pt-1"  appearance="outline">
+                      <mat-label>My Passphrase</mat-label>
+                      <input 
+                      matInput 
+                      placeholder="My Passphrase" 
+                      [formControl]="tokenFormGroup.controls['myPassphrase']"
+                      required>
+                  </mat-form-field>
+                  <mat-progress-bar *ngIf="waitResponse" mode="indeterminate" class="session-progress"></mat-progress-bar>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
                     <mat-label>Challenge token</mat-label>
                     <textarea 
                     matInput 
@@ -24,6 +34,7 @@
                     [formControl]="tokenFormGroup.controls['challengeToken']"
                     [value]="tokenValue"
                     required></textarea>
+                    <mat-progress-bar *ngIf="waitResponse" mode="indeterminate" class="session-progress"></mat-progress-bar>
                   </mat-form-field>
                   <button mat-raised-button class="mat-accent full-width mb-1" (click)="getChallengeToken()">Request Challenge</button>
               </div>

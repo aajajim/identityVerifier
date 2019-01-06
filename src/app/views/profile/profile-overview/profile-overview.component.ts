@@ -26,4 +26,7 @@ export class ProfileOverviewComponent implements OnInit {
     }
   }
 
+  deleteProperty(prop: ArdorProperty) {
+  }
+
 }

@@ -59,6 +59,8 @@ import { EgretSideNavToggleDirective } from './directives/egret-side-nav-toggle.
 import { RelativeTimePipe } from './pipes/relative-time.pipe';
 import { ExcerptPipe } from './pipes/excerpt.pipe';
 import { GetValueByKeyPipe } from './pipes/get-value-by-key.pipe';
+import { TransactionTypePipe} from './pipes/tx-type.pipe';
+import { TransactionConfirmationsPipe} from './pipes/tx-confirmations.pipe';
 
 // SERVICES
 import { ThemeService } from './services/theme.service';
@@ -96,7 +98,9 @@ const classesToInclude = [
   EgretSideNavToggleDirective,
   RelativeTimePipe,
   ExcerptPipe,
-  GetValueByKeyPipe
+  GetValueByKeyPipe,
+  TransactionTypePipe,
+  TransactionConfirmationsPipe
 ]
 
 @NgModule({

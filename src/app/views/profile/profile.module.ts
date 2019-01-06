@@ -16,6 +16,7 @@ import {
   MatTabsModule,
   MatInputModule,
   MatProgressBarModule,
+  MatProgressSpinnerModule,
   MatStepperModule
  } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -47,6 +48,7 @@ import { ProfileRoutes } from './profile.routing';
     MatTabsModule,
     MatInputModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatStepperModule,
     FlexLayoutModule,
     NgxDatatableModule,

@@ -1,4 +1,5 @@
 <div fxLayout="row wrap">
+
   <div fxLayout="column" fxFlex="100" fxFlex.gt-md="40">
       <!-- Childchains Balances -->
       <mat-card class="default">
@@ -20,14 +21,13 @@
   </div>
   
   <div fxLayout="column" fxFlexAlign="stretch" fxFlex="100" fxFlex.gt-md="60">
-
     <!-- Verified Accounts -->
     <mat-card class="default">
       <mat-card-title>Verified Accounts</mat-card-title>
       <mat-card-content class="p-0">
         <div class="list-tasktype">
           <div class="tasktype-item" *ngFor="let t of verifiedAccounts | async">
-            <img mat-list-avatar class="mr-1" [src]="t.faviconUrl" alt="">
+            <img *ngIf="t.faviconUrl" mat-list-avatar class="mr-1" [src]="t.faviconUrl" alt="">
             <span>{{t.property}}</span>
             <span fxFlex></span>
             <span>{{t.value}}</span>
@@ -46,8 +46,8 @@
         </div>
       </mat-card-content>
     </mat-card>
-
   </div>
+
 </div>
 
 <!-- Blockchain Activity -->
@@ -61,12 +61,13 @@
             [headerHeight]="50"
             [footerHeight]="50" 
             [rowHeight]="50"
-            [limit]="10"
-            [sorts]="[{prop: 'DateTime', dir: 'desc'}]"
+            [limit]="6"
             [rows]="transactions | async">
               <ngx-datatable-column name="DateTime" [flexGrow]="1">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row?.timestamp }}
+                 <a href="https://test.ardorportal.org/transactions/fullHash/{{row?.fullHash}}/chain/2" style="color: blue; text-decoration: underline" target="_blank"> 
+                   {{ row?.timestamp*1000 | date:'medium' }} 
+                 </a>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Sender" [flexGrow]="1">
@@ -81,12 +82,22 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Type" [flexGrow]="1">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row?.type }}
+                  {{ row?.type | txType}}
                 </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Amount" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.amountNQT | number: '.2' }}
+                  </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Fee" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.feeNQT | number: '.4'}}
+                  </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Confirmations" [flexGrow]="1">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row?.confirmations }}
+                  {{ row?.confirmations | txConfirmations}}
                 </ng-template>
               </ngx-datatable-column>
             </ngx-datatable>
