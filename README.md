@@ -1,33 +1,22 @@
-# Decentralized Identity Verifier
+# Decentralized Identity Verifier (In progress)
 
 This project is a response to the [Ardor Online Hackathon](https://www.jelurida.com/ardor-hackathon-2018) and it deals with the Identity Verification Challenge.
 
-# Doc
+# LightWeight smart Contract
 
-[Egret Doc](http://egret-doc.mhrafi.com/)
+The contract is build using Java language and is located in the `contracts` folder.
+The contract has been deployed on Ardor TestNet by account: ARDOR-HWZW-5TT6-U68F-H26L8 as a data file with [This Transaction](https://test.ardorportal.org/transactions/fullHash/dd546431252a987a317a5e405077d9cdbcdbee034f9dac1d806e86c81087aed9/chain/2)
 
-## Web application
+# Web application
 
-This repo represents the web application that manages the interactions with Ardor blockchain.
+This repo represents the web application that manages the interactions with Ardor blockchain and particularly the IdentityVerifier contract.
 
+When you clone this repo for the first time, please ensure to run `npm install` command in order to det all the dependencies
 
-## LightWeight Contracts
+## Build the application
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+Run `ng serve` to build the project and serve in the browser at http://localhost:4200. 
 
 ## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+To get more help on how this web app work or on the contract, please send message on twitter @aajaji_m.
