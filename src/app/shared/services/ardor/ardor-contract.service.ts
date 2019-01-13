@@ -77,6 +77,22 @@ export class ArdorContractService {
         const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
         const req = new URLSearchParams(uri);
         req.append('requestType', requestType);
+        req.append('broadcast', 'false');
+        this.http.post(
+            ArdorConfig.ApiUrl,
+            req.toString(),
+            {headers: headers}
+        ).subscribe(
+            res => {
+                if (res !== undefined && !res['errorDescription']) {
+                    req.append('feeNQT', res['minimumFeeFQT']);
+                }else {
+                    req.append('feeNQT', '100000000');
+                }
+            },
+            err => { handleErrors('getUnsignedBytes', null); }
+        ).unsubscribe();
+
         return this.http.post(
             ArdorConfig.ApiUrl,
             req.toString(),
@@ -85,8 +101,9 @@ export class ArdorContractService {
     }
     private verifyAndSign(unsigned: string, passPhrase: string, request: string, txData: object): string {
         let txObj = {};
-        txData.toString().replace(/([^=&]+)=([^&]*)/g, function(m, key, value) {
+        txData.toString().replace(/([^=&]+)=([^&]*)/g, function(m, key, value){
             txObj[decodeURIComponent(key)] = decodeURIComponent(value);
+            return '';
         });
         if (ardorjs.verifyTransactionBytes(unsigned, request, txObj, this.ardrAS.account.publicKey)) {
             return ardorjs.signTransactionBytes(unsigned, passPhrase);
@@ -97,7 +114,7 @@ export class ArdorContractService {
     private broadcastTransaction(txBytes: string, attachment: object = null): Observable<object> {
         const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
         const uri = new URLSearchParams({
-            requestType: 'broadcastTransactio',
+            requestType: 'broadcastTransaction',
             transactionBytes: txBytes
         });
         if (attachment !== null) {
