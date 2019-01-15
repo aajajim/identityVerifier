@@ -31,43 +31,39 @@ export class ArdorContractService {
                 requestType: 'getChallenge',
             }
         });
-        this.sendMessageForChallenge(msg, passPhrase);
-        const received = this.ardrAS.getAccountReceivedTransactions(this.ardrAS.account.accountRS);
-        const timer$ = timer(0, 4000);
-        return timer$.pipe(
-            switchMap(_ => received),
-            map(
-                res => {
-                    const lastTx = res.sort(function(a, b){ return (b.timestamp - a.timestamp); })[0];
-                    if (lastTx !== undefined
-                        && lastTx.senderRS === ArdorConfig.IdVerifierContractAdress
-                        && lastTx.timestamp > broadcastTime
-                        && lastTx.attachedMessage !== undefined) {
-                            return lastTx;
-                    }
-                }
-            )
-        );
+        this.sendRequestWithMessage('sendMessage', msg, passPhrase);
+        return this.waitForContractResponse(broadcastTime);
     }
 
-    verifyAccount(msg: JSON) {
+    verifyAccount(challengeText: string, signedToken: string, publicUrl: string,
+        passPhrase: string, broadcastTime: number): Observable<ArdorTransaction> {
         // Send money with msg
-        const res = [];
-        res.push('verified', 'true');
-        res.push('domain', 'twitter.com');
-        return res;
+        const msg = JSON.stringify({
+            contract: ArdorConfig.IdVerifierContractName,
+            params: {
+                verificationType: 'publicAccount',
+                requestType: 'verifyAccount',
+                challenge: challengeText,
+                signedToken: signedToken,
+                externalSource: {
+                    publicUrl: publicUrl
+                }
+            }
+        });
+        this.sendRequestWithMessage('sendMoney', msg, passPhrase, 10 ** 8);
+        return this.waitForContractResponse(broadcastTime);
     }
 
-    private sendMessageForChallenge(msg: string, passPhrase: string) {
+    private sendRequestWithMessage(request: string, msg: string, passPhrase: string, amount: number = 0) {
         // Build query params
-        const requestType = 'sendMessage';
+        const requestType = request;
         const data = new URLSearchParams({
             recipient: ArdorConfig.IdVerifierContractAdress,
             chain: '2',
+            amountNQT: amount.toString(),
             message: msg,
             messageIsPrunable: 'true',
-            publicKey: this.ardrAS.account.publicKey,
-            amountNQT: '0'
+            publicKey: this.ardrAS.account.publicKey
         });
         this.getUnsignedBytes(requestType, data).subscribe(
             res => {
@@ -154,6 +150,24 @@ export class ArdorContractService {
         ).pipe(
             map(res => res),
             catchError(handleErrors('broadcastTransaction', null))
+        );
+    }
+    private waitForContractResponse(broadcastTime): Observable<ArdorTransaction>{
+        const received = this.ardrAS.getAccountReceivedTransactions(this.ardrAS.account.accountRS);
+        const timer$ = timer(0, 4000);
+        return timer$.pipe(
+            switchMap(_ => received),
+            map(
+                res => {
+                    const lastTx = res.sort(function(a, b){ return (b.timestamp - a.timestamp); })[0];
+                    if (lastTx !== undefined
+                        && lastTx.senderRS === ArdorConfig.IdVerifierContractAdress
+                        && lastTx.timestamp > broadcastTime
+                        && lastTx.attachedMessage !== undefined) {
+                            return lastTx;
+                    }
+                }
+            )
         );
     }
 }
