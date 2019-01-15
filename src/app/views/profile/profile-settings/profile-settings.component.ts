@@ -76,7 +76,9 @@ export class ProfileSettingsComponent implements OnInit {
     const unsubscribe$ = new Subject<boolean>();
     if (passphrase) {
       this.waitResponse = true;
-      this.ardorCS.generateToken(this.tokenFormGroup.controls['myPassphrase'].value, new Date().getTime() / 1000)
+      const now = new Date();
+      const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
+      this.ardorCS.generateToken(this.tokenFormGroup.controls['myPassphrase'].value, broadcastTime)
       .pipe(takeUntil(unsubscribe$))
       .subscribe(
         res => {
@@ -113,8 +115,34 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   sendToContract() {
-    console.log('Send to Contract');
-  }
+    const errMsg = 'Error occured while requesting challenge, please try again!';
+    const passphrase = this.tokenFormGroup.controls['myPassphrase'].value;
+    const unsubscribe$ = new Subject<boolean>();
+    if (passphrase) {
+      const now = new Date();
+      const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
+      this.ardorCS.verifyAccount(
+        this.publishingFormGroup.controls['challengeText'].value,
+        this.publishingFormGroup.controls['signedToken'].value,
+        this.publishingFormGroup.controls['publicUrl'].value,
+        this.publishingFormGroup.controls['myPassphrase'].value,
+        broadcastTime)
+        .pipe(takeUntil(unsubscribe$))
+        .subscribe(
+          res => {
+            if (res !== undefined) {
+              this.challengeText = JSON.parse(res.attachedMessage).value;
+              unsubscribe$.next(true);
+            }
+          },
+          err => {
+            this.progressBar.mode = 'determinate';
+            this.submitButton.disabled = false;
+          }
+         );
+      }
+      unsubscribe$.unsubscribe();
+    }
 
   submit() {
     console.log('submit button clicked');
