@@ -44,10 +44,15 @@ export class ArdorAccountService {
       const timer$ = timer(0, REFRESH_INTERVAL);
       const rec = this.getAccountReceivedTransactions(this.account.accountRS);
       const send = this.getAccountSentTransactions(this.account.accountRS);
-      this.accTransactionsCache = timer$.pipe(
+      return concat(rec, send).pipe(
+        map(
+          res => res.sort(function(a, b) { return (b.timestamp - a.timestamp); } )
+        )
+      );
+      /*this.accTransactionsCache = timer$.pipe(
         switchMap(_ => concat(rec, send)),
         shareReplay(BUFFER_ZISE)
-      );
+      );*/
     }
     return this.accTransactionsCache;
   }

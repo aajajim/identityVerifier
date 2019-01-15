@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse  } from '@angular/common/http';
-import { catchError, map, tap, shareReplay } from 'rxjs/operators';
+import { catchError, map, takeUntil, switchMap } from 'rxjs/operators';
 
 import { handleErrors } from './generic-methods';
 
 import { ArdorConfig } from '../../config/ardor.config';
-import { Observable } from 'rxjs';
+import { Observable, Subject, timer } from 'rxjs';
 import { ArdorAccountService } from './ardor-account.service';
 import { ArdorTransaction } from 'app/shared/models/ardor.model';
 
@@ -14,13 +14,15 @@ const ardorjs = require('ardorjs');
 
 @Injectable()
 export class ArdorContractService {
+    public sendMessageBroadcasted: boolean;
+    public broadcastTime: number;
 
     constructor(private http: HttpClient, private ardrAS: ArdorAccountService) {
 
     }
 
 
-    generateToken(passPhrase: string): Observable<Array<ArdorTransaction>> {
+    generateToken(passPhrase: string, broadcastTime: number): Observable<ArdorTransaction> {
         // Message details to contract
         const msg = JSON.stringify({
             contract: ArdorConfig.IdVerifierContractName,
@@ -29,6 +31,34 @@ export class ArdorContractService {
                 requestType: 'getChallenge',
             }
         });
+        this.sendMessageForChallenge(msg, passPhrase);
+        const received = this.ardrAS.getAccountReceivedTransactions(this.ardrAS.account.accountRS);
+        const timer$ = timer(0, 4000);
+        return timer$.pipe(
+            switchMap(_ => received),
+            map(
+                res => {
+                    const lastTx = res.sort(function(a, b){ return (b.timestamp - a.timestamp); })[0];
+                    if (lastTx !== undefined
+                        && lastTx.senderRS === ArdorConfig.IdVerifierContractAdress
+                        && lastTx.timestamp > broadcastTime
+                        && lastTx.attachedMessage !== undefined) {
+                            return lastTx;
+                    }
+                }
+            )
+        );
+    }
+
+    verifyAccount(msg: JSON) {
+        // Send money with msg
+        const res = [];
+        res.push('verified', 'true');
+        res.push('domain', 'twitter.com');
+        return res;
+    }
+
+    private sendMessageForChallenge(msg: string, passPhrase: string) {
         // Build query params
         const requestType = 'sendMessage';
         const data = new URLSearchParams({
@@ -48,36 +78,33 @@ export class ArdorContractService {
                     if (signedTx !== 'error!') {
                         this.broadcastTransaction(signedTx, attachment).subscribe(
                             ress => {
-                                if (ress === undefined || !ress['fullHash']) {
-                                    return 'Error occured while broadcasting transaction, please try again!';
+                                if (ress !== undefined && ress['fullHash']) {
+                                    this.broadcastTime = new Date().getTime() / 1000;
+                                    this.sendMessageBroadcasted = true;
+                                   console.log('correctly broadcasted!');
                                 }else {
-                                    return this.ardrAS.accIncomingTransactions;
+                                    this.sendMessageBroadcasted = false;
+                                    console.log('didn\'t correctly broadcasted!');
                                 }
                             },
                             errr => { handleErrors('generateToken', null); }
                         );
+                    } else {
+                        this.sendMessageBroadcasted = false;
+                        console.log('didn\'t correctly sign data!');
                     }
+                } else {
+                    this.sendMessageBroadcasted = false;
+                    return console.log('didn\'t correctly sign data!');
                 }
-                return null;
             },
             err => { handleErrors('getUnsignedBytes', null); }
         );
-        return null;
     }
-
-    verifyAccount(msg: JSON) {
-        // Send money with msg
-        const res = [];
-        res.push('verified', 'true');
-        res.push('domain', 'twitter.com');
-        return res;
-    }
-
     private getUnsignedBytes(requestType: string, uri: URLSearchParams): Observable<object> {
         const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
         const req = new URLSearchParams(uri);
         req.append('requestType', requestType);
-        req.append('broadcast', 'false');
         this.http.post(
             ArdorConfig.ApiUrl,
             req.toString(),
@@ -91,7 +118,7 @@ export class ArdorContractService {
                 }
             },
             err => { handleErrors('getUnsignedBytes', null); }
-        ).unsubscribe();
+        );
 
         return this.http.post(
             ArdorConfig.ApiUrl,

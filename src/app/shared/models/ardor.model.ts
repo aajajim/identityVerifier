@@ -104,7 +104,7 @@ export class ArdorTransaction {
     public fullHash: string;
     public confirmations: number;
     public attachment: JSON;
-    public attachedMessage: JSON;
+    public attachedMessage: string;
 
     constructor(tx: Object) {
         const js = JSON.parse(JSON.stringify(tx));
@@ -117,7 +117,7 @@ export class ArdorTransaction {
         this.amountNQT = Number.parseInt(js.amountNQT) / 10 ** 8 ;
         this.timestamp = Number.parseInt(js.timestamp) + 1514300399;
         this.fullHash = js.fullHash ;
-        this.confirmations = (js.confirmation) ? js.confirmation : 0 ;
+        this.confirmations = js.confirmations;
         this.attachment = JSON.parse(JSON.stringify(js.attachment));
         if (this.attachment !== undefined  && this.attachment['message'] !== undefined) {
             this.attachedMessage = this.attachment['message'];

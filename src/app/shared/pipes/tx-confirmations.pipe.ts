@@ -6,7 +6,7 @@ export class TransactionConfirmationsPipe implements PipeTransform{
         if (value > 1440) {
             return '1440+';
         }
-        return value;
+        return value.toString();
     }
 
 }

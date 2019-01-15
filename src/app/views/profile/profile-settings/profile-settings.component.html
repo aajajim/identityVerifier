@@ -25,8 +25,17 @@
                       [formControl]="tokenFormGroup.controls['myPassphrase']"
                       required>
                   </mat-form-field>
-                  <mat-progress-bar *ngIf="waitResponse" mode="indeterminate" class="session-progress"></mat-progress-bar>
-                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                  <mat-progress-bar *ngIf="waitResponse" mode="indeterminate" class="session-progress full-width pt-1"></mat-progress-bar>
+                  <mat-form-field *ngIf="waitResponse" class="full-width" appearance="outline">
+                    <mat-label>Challenge text</mat-label>
+                    <textarea 
+                    matInput 
+                    placeholder="Challenge text" 
+                    [formControl]="tokenFormGroup.controls['challengeText']"
+                    [value]="challengeText"
+                    required></textarea>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="waitResponse" class="full-width" appearance="outline">
                     <mat-label>Challenge token</mat-label>
                     <textarea 
                     matInput 
@@ -34,7 +43,6 @@
                     [formControl]="tokenFormGroup.controls['challengeToken']"
                     [value]="tokenValue"
                     required></textarea>
-                    <mat-progress-bar *ngIf="waitResponse" mode="indeterminate" class="session-progress"></mat-progress-bar>
                   </mat-form-field>
                   <button mat-raised-button class="mat-accent full-width mb-1" (click)="getChallengeToken()">Request Challenge</button>
               </div>
@@ -58,6 +66,15 @@
                       required>
                   </mat-form-field>
                   <mat-form-field class="full-width pt-1"  appearance="outline">
+                    <mat-label>Challenge text</mat-label>
+                    <textarea 
+                    matInput 
+                    placeholder="Challenge text" 
+                    [formControl]="signingFormGroup.controls['challengeText']"
+                    [value]="challengeText"
+                    required></textarea>
+                </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
                       <mat-label>Challenge token</mat-label>
                       <textarea 
                       matInput 
@@ -65,7 +82,7 @@
                       [formControl]="signingFormGroup.controls['challengeToken']"
                       [value]="tokenValue"
                       required></textarea>
-                    </mat-form-field>
+                  </mat-form-field>
                   <mat-form-field class="full-width pt-1"  appearance="outline">
                       <mat-label>My Passphrase</mat-label>
                       <input 
@@ -109,6 +126,15 @@
                       [value]="myAccount"
                       required>
                   </mat-form-field>
+                  <mat-form-field class="full-width pt-1"  appearance="outline">
+                    <mat-label>Challenge text</mat-label>
+                    <textarea 
+                    matInput 
+                    placeholder="Challenge text" 
+                    [formControl]="publishingFormGroup.controls['challengeText']"
+                    [value]="challengeText"
+                    required></textarea>
+                </mat-form-field>
                   <mat-form-field class="full-width pt-1"  appearance="outline">
                       <mat-label>Challenge token</mat-label>
                       <textarea 
@@ -168,100 +194,6 @@
             </div>
           </mat-step>
         </mat-horizontal-stepper>
-      </mat-card-content>
-    </mat-tab>
-    <mat-tab label="Profile Picture">
-      <mat-card-content>
-        <div class="mb-1 mt-1">
-          <p>Upload a profile picture</p>
-          <input type="file" ng2FileSelect [uploader]="uploader" />
-        </div>
-
-        <div class="mb-1">
-          <div ng2FileDrop
-          [ngClass]="{'dz-file-over': hasBaseDropZoneOver}"
-          [uploader]="uploader"
-          (fileOver)="fileOverBase($event)"
-          class="fileupload-drop-zone">
-          Drop png/jpeg file here
-          </div>
-        </div>
-        <table class="default-table mat-box-shadow" style="width: 100%">
-          <thead>
-            <tr>
-                <th width="30%">Name</th>
-                <th>Size</th>
-                <th>Progress</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody *ngIf="uploader.queue.length; else tableNoData">
-            <tr *ngFor="let item of uploader.queue">
-                <td>{{ item?.file?.name }}</td>
-                <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-                <td>
-                    <div class="progress" style="margin-bottom: 0;">
-                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
-                        <mat-progress-bar
-                          class=""
-                          color="primary"
-                          mode="determinate"
-                          [value]="item.progress">
-                        </mat-progress-bar>
-                    </div>
-                </td>
-                <td class="">
-                    <mat-icon *ngIf="item.isSuccess">check</mat-icon>
-                    <mat-icon *ngIf="item.isCancel" color="accent">cancel</mat-icon>
-                    <mat-icon *ngIf="item.isError" color="warn">error</mat-icon>
-                </td>
-                <td nowrap>
-                    <button 
-                    mat-raised-button
-                    class="mat-primary"
-                    (click)="item.upload()"
-                    [disabled]="item.isReady || item.isUploading || item.isSuccess">Upload</button>
-                    <button 
-                    mat-raised-button
-                    class="mat-accent"
-                    (click)="item.cancel()"
-                    [disabled]="!item.isUploading">Cancel</button>
-
-                    <button 
-                    mat-raised-button
-                    class="mat-warn"
-                    (click)="item.remove()">Remove</button>
-                </td>
-            </tr>
-            </tbody>
-            <ng-template #tableNoData>
-              <p [ngStyle]="{padding: '0 1.2rem'}">Queue is empty</p>
-            </ng-template>
-        </table>
-      </mat-card-content>
-    </mat-tab>
-    <mat-tab label="Privacy Settings">
-      <mat-card-content>
-        <div class="mb-1 mt-1">
-          <mat-checkbox> Get weekly news in your email.</mat-checkbox>
-        </div>
-        <div class="mb-1">
-          <mat-checkbox> Get notification when someone follows you.</mat-checkbox>
-        </div>
-        <div class="mb-1">
-          <mat-checkbox> Get email when someone follows you.</mat-checkbox>
-        </div>
-        <div class="mb-1">
-            <p>Choose your admin panel color schemes.</p>
-            <mat-radio-group fxLayout="column" fxLayoutGap="4px">
-              <mat-radio-button value="indigo">Indigo</mat-radio-button>
-              <mat-radio-button value="blue">Blue</mat-radio-button>
-              <mat-radio-button value="pink">Pink</mat-radio-button>
-              <mat-radio-button value="purple">Purple</mat-radio-button>
-            </mat-radio-group>
-        </div>
-        <button mat-raised-button color="primary">Save</button>
       </mat-card-content>
     </mat-tab>
   </mat-tab-group>
