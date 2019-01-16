@@ -19,7 +19,7 @@ Options:
 
 
 run_build() {
-  ng build --prod
+  ng build --prod --base-href "https://aajajim.github.io/identityVerifier/"
 }
 
 parse_args() {
