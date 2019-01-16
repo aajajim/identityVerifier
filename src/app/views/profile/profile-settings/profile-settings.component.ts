@@ -24,12 +24,13 @@ export class ProfileSettingsComponent implements OnInit {
   publishingFormGroup: FormGroup;
   @ViewChild(MatButton) submitButton: MatButton;
 
+  contractAccount: string;
+  myAccount: string;
+  passPhrase: string;
   challengeText: string;
   tokenValue: string;
   signedToken: string;
   isSigned = false;
-  contractAccount: string;
-  myAccount: string;
   publicUrl: string;
   minimalFee: number;
   waitResponse = false;
@@ -51,54 +52,52 @@ export class ProfileSettingsComponent implements OnInit {
     this.minimalFee = ArdorConfig.PropertyFee;
 
     this.tokenFormGroup = this.fb.group({
-      contractAccount: [{value: this.contractAccount, disabled: true}, Validators.required],
-      myPassphrase: ['', Validators.required],
-      challengeText: [{value: '', disabled: true}, Validators.required],
-      challengeToken: [{value: '', disabled: true}, Validators.required]
+      contractAccount: Validators.required,
+      myPassphrase: Validators.required,
+      challengeText: Validators.required,
+      challengeToken: Validators.required,
     });
     this.signingFormGroup = this.fb.group({
-      myAccount: [{value: this.myAccount, disabled: false}, Validators.required],
-      challengeText: [{value: this.challengeText, disabled: true}, Validators.required],
-      challengeToken: [{value: this.tokenValue, disabled: true}, Validators.required],
-      myPassphrase: ['', Validators.required],
-      signedToken: ['', Validators.required],
+      myAccount: Validators.required,
+      challengeText: Validators.required,
+      challengeToken: Validators.required,
+      myPassphrase: Validators.required,
+      signedToken: Validators.required,
     });
     this.publishingFormGroup = this.fb.group({
-      myAccount: [{value: this.myAccount, disabled: true}, Validators.required],
-      challengeText: [{value: this.challengeText, disabled: true}, Validators.required],
-      challengeToken: [{value: this.tokenValue, disabled: true}, Validators.required],
-      signedToken: [{value: this.signedToken, disabled: true}, Validators.required],
-      publicUrl: ['', Validators.required],
-      propertyFee: [{value: this.minimalFee, disabled: false}, Validators.min(this.minimalFee)]
+      myAccount: Validators.required,
+      challengeText: Validators.required,
+      challengeToken: Validators.required,
+      signedToken: Validators.required,
+      publicUrl: Validators.required,
+      propertyFee: Validators.min(this.minimalFee)
     });
   }
 
   getChallengeToken() {
     const errMsg = 'Error occured while requesting challenge, please try again!';
-    const passphrase = this.tokenFormGroup.controls['myPassphrase'].value;
+    this.passPhrase = this.tokenFormGroup.controls['myPassphrase'].value;
     const unsubscribe$ = new Subject<boolean>();
-    if (passphrase) {
+    if (this.passPhrase) {
       this.waitResponse = true;
       this.appLoaderS.open('Please wait for contract response!');
       const now = new Date();
       const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
-      this.ardorCS.generateToken(this.tokenFormGroup.controls['myPassphrase'].value, broadcastTime)
+      this.ardorCS.generateToken(this.passPhrase, broadcastTime)
       .pipe(takeUntil(unsubscribe$))
       .subscribe(
         res => {
           if (res !== undefined) {
             this.challengeText = JSON.parse(res.attachedMessage).challenge;
             this.tokenValue = JSON.parse(res.attachedMessage).token;
-            this.tokenFormGroup.controls['challengeText'].setValue(this.challengeText);
-            this.tokenFormGroup.controls['challengeToken'].setValue(this.tokenValue);
             this.submitButton.disabled = true;
             this.appLoaderS.close();
             unsubscribe$.next(true);
           }
         },
         err => {
-          this.tokenFormGroup.controls['challengeText'].setValue(errMsg);
-          this.tokenFormGroup.controls['challengeToken'].setValue(errMsg);
+          this.challengeText = errMsg;
+          this.tokenValue = errMsg;
           this.appLoaderS.close();
           this.submitButton.disabled = false;
         }
@@ -107,10 +106,8 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   signToken() {
-    if ( this.signingFormGroup.controls['myPassphrase'].value !== undefined ) {
-      this.signedToken = ardorjs.signTransactionBytes(
-        this.signingFormGroup.controls['challengeToken'].value,
-        this.signingFormGroup.controls['myPassphrase'].value);
+    if ( this.passPhrase !== undefined ) {
+      this.signedToken = ardorjs.signToken( this.tokenValue, this.passPhrase);
       this.signingFormGroup.controls['signedToken'].setValue(this.signedToken);
       this.isSigned = true;
       this.submitButton.disabled = true;
@@ -118,36 +115,40 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   sendToContract() {
-    const passphrase = this.signingFormGroup.controls['myPassphrase'].value;
     const unsubscribe$ = new Subject<boolean>();
-    if (passphrase) {
+    if (this.passPhrase) {
       this.appLoaderS.open('Please wait for contract response!');
       const now = new Date();
       const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
+      this.submitButton.disabled = true;
       this.ardorCS.verifyAccount(
-        this.publishingFormGroup.controls['challengeText'].value,
-        this.publishingFormGroup.controls['signedToken'].value,
-        this.publishingFormGroup.controls['publicUrl'].value,
-        passphrase,
+        this.challengeText,
+        this.signedToken,
+        this.publicUrl,
+        this.passPhrase,
         broadcastTime)
         .pipe(takeUntil(unsubscribe$))
         .subscribe(
           res => {
             if (res !== undefined) {
-              const returnMsg = JSON.parse(res.attachedMessage).value;
+              const returnMsg = JSON.parse(res.attachedMessage);
               this.appLoaderS.close();
-              this.appConfirmS.confirm({title: 'Contract Response', message: 'Congratulations, your account has been verified.' });
+              if (returnMsg['errorDescription']) {
+                this.appConfirmS.confirm({title: 'Contract Response', message: returnMsg['errorDescription'] });
+              } else {
+                this.appConfirmS.confirm({title: 'Contract Response', message: 'Congratulations, your account has been verified.' });
+              }
               unsubscribe$.next(true);
             }
           },
           err => {
             this.appLoaderS.close();
-            this.appConfirmS.confirm({title: 'Contract Response', message: 'Sorry, something wrong went the verification, try again.' });
+            this.appConfirmS.confirm({title: 'Contract Response', message: 'Sorry, something wrong went with the verification, try again.' });
             this.submitButton.disabled = false;
           }
          );
       }
-    }
+  }
 
   submit() {
     console.log('submit button clicked');

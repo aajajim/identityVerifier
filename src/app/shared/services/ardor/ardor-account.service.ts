@@ -96,10 +96,11 @@ export class ArdorAccountService {
 
   getAccountProperties(account: string): Observable<Array<ArdorProperty>> {
     // Build query params
-    // setter: ArdorConfig.IdVerfierContract
     const uri = new URLSearchParams({
       requestType: 'getAccountProperties',
-      recipient: account
+      recipient: account,
+      property: 'verifiedAccount',
+      setter: ArdorConfig.IdVerifierContractAdress
     });
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
 

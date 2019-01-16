@@ -28,9 +28,9 @@
         <div class="list-tasktype">
           <div class="tasktype-item" *ngFor="let t of verifiedAccounts | async">
             <img *ngIf="t.faviconUrl" mat-list-avatar class="mr-1" [src]="t.faviconUrl" alt="">
-            <span>{{t.property}}</span>
+            <span>{{t.verifiedAcc}}</span>
             <span fxFlex></span>
-            <span>{{t.value}}</span>
+            <span><a href="{{t.verifiedAccUrl}}" style="color: blue; text-decoration: underline" target="_blank">Click here to see published token</a></span>
             <span fxFlex></span>
             <mat-chip mat-sm-chip color="primary" [selected]="t.status ? true : false">{{t.status ? 'completed' : 'pending'}}</mat-chip>
             <button mat-icon-button mat-sm-button [matMenuTriggerFor]="taskMenu" class="tasktype-action ml-1">

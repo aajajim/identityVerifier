@@ -38,13 +38,48 @@ export class ArdorProperty {
         this.status = true;
         try {
             const val = JSON.parse(js.value);
-            if (Object.keys(val).includes('verifiedAccount')) {
-                this.verifiedAcc = val.get('verifiedAccount');
+            if (Object.keys(val).includes('publicUrl')) {
+                this.verifiedAccUrl = val.publicUrl;
+                this.verifiedAcc = this.extractRootDomain(this.verifiedAccUrl);
                 this.faviconUrl = 'https://www.google.com/s2/favicons?domain=' + this.verifiedAcc;
-                this.verifiedAccUrl = val.get('verificationUrl');
             }
         } catch (e) {}
+    }
+
+
+    private extractHostname(url: string): string{
+        let hostname: string;
+        // find & remove protocol (http, ftp, etc.) and get hostname
+        if (url.indexOf('//') > -1) {
+            hostname = url.split('/')[2];
+        }else {
+            hostname = url.split('/')[0];
         }
+        // find & remove port number
+        hostname = hostname.split(':')[0];
+        // find & remove "?"
+        hostname = hostname.split('?')[0];
+        return hostname;
+    }
+
+    // To address those who want the "root domain," use this function:
+    private extractRootDomain(url: string) {
+        let domain = this.extractHostname(url);
+        const splitArr = domain.split('.');
+        const arrLen = splitArr.length;
+
+        // extracting the root domain here
+        // if there is a subdomain
+        if (arrLen > 2) {
+            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+            // check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
+            if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
+                // this is using a ccTLD
+                domain = splitArr[arrLen - 3] + '.' + domain;
+            }
+        }
+        return domain;
+    }
 }
 
 export class ArdorBalance {
@@ -115,7 +150,7 @@ export class ArdorTransaction {
         this.subtype = js.subtype ;
         this.feeNQT = Number.parseInt(js.feeNQT) / 10 ** 8 ;
         this.amountNQT = Number.parseInt(js.amountNQT) / 10 ** 8 ;
-        this.timestamp = Number.parseInt(js.timestamp) + 1514300399;
+        this.timestamp = Number.parseInt(js.timestamp) + 1514300400;
         this.fullHash = js.fullHash ;
         this.confirmations = js.confirmations;
         this.attachment = JSON.parse(JSON.stringify(js.attachment));

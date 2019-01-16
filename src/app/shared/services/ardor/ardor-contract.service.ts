@@ -165,7 +165,7 @@ export class ArdorContractService {
                     console.log(broadcastTime - lastTx.timestamp);
                     if (lastTx !== undefined
                         && lastTx.senderRS === ArdorConfig.IdVerifierContractAdress
-                        && lastTx.timestamp > broadcastTime
+                        && lastTx.timestamp >= broadcastTime
                         && lastTx.attachedMessage !== undefined) {
                             return lastTx;
                     }
