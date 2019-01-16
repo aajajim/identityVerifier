@@ -136,6 +136,7 @@ export class ProfileSettingsComponent implements OnInit {
               if (returnMsg['errorDescription']) {
                 this.appConfirmS.confirm({title: 'Contract Response', message: returnMsg['errorDescription'] });
               } else {
+                this.ardorAS.clearCaches();
                 this.appConfirmS.confirm({title: 'Contract Response', message: 'Congratulations, your account has been verified.' });
               }
               unsubscribe$.next(true);

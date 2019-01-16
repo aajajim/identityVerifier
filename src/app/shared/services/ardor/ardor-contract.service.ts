@@ -15,7 +15,6 @@ const ardorjs = require('ardorjs');
 @Injectable()
 export class ArdorContractService {
     public sendMessageBroadcasted: boolean;
-    public broadcastTime: number;
 
     constructor(private http: HttpClient, private ardrAS: ArdorAccountService) {
 
@@ -75,23 +74,18 @@ export class ArdorContractService {
                         this.broadcastTransaction(signedTx, attachment).subscribe(
                             ress => {
                                 if (ress !== undefined && ress['fullHash']) {
-                                    this.broadcastTime = new Date().getTime() / 1000;
                                     this.sendMessageBroadcasted = true;
-                                   console.log('correctly broadcasted!');
                                 }else {
                                     this.sendMessageBroadcasted = false;
-                                    console.log('didn\'t correctly broadcasted!');
                                 }
                             },
                             errr => { handleErrors('generateToken', null); }
                         );
                     } else {
                         this.sendMessageBroadcasted = false;
-                        console.log('didn\'t correctly sign data!');
                     }
                 } else {
                     this.sendMessageBroadcasted = false;
-                    return console.log('didn\'t correctly sign data!');
                 }
             },
             err => { handleErrors('getUnsignedBytes', null); }
@@ -160,9 +154,6 @@ export class ArdorContractService {
             map(
                 res => {
                     const lastTx = res.sort(function(a, b){ return (b.timestamp - a.timestamp); })[0];
-                    console.log(broadcastTime);
-                    console.log(lastTx.timestamp);
-                    console.log(broadcastTime - lastTx.timestamp);
                     if (lastTx !== undefined
                         && lastTx.senderRS === ArdorConfig.IdVerifierContractAdress
                         && lastTx.timestamp >= broadcastTime
