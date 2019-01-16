@@ -89,7 +89,7 @@
                       matInput 
                       placeholder="My Passphrase" 
                       [formControl]="signingFormGroup.controls['myPassphrase']"
-                      [(ngModel)]="passphrase"
+                      [(ngModel)]="passPhrase"
                       required>
                   </mat-form-field>
                   <mat-form-field *ngIf="isSigned" class="full-width pt-1"  appearance="outline">
