@@ -118,33 +118,35 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   sendToContract() {
-    const errMsg = 'Error occured while requesting challenge, please try again!';
-    const passphrase = this.tokenFormGroup.controls['myPassphrase'].value;
+    const passphrase = this.signingFormGroup.controls['myPassphrase'].value;
     const unsubscribe$ = new Subject<boolean>();
     if (passphrase) {
+      this.appLoaderS.open('Please wait for contract response!');
       const now = new Date();
       const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
       this.ardorCS.verifyAccount(
         this.publishingFormGroup.controls['challengeText'].value,
         this.publishingFormGroup.controls['signedToken'].value,
         this.publishingFormGroup.controls['publicUrl'].value,
-        this.publishingFormGroup.controls['myPassphrase'].value,
+        passphrase,
         broadcastTime)
         .pipe(takeUntil(unsubscribe$))
         .subscribe(
           res => {
             if (res !== undefined) {
-              this.challengeText = JSON.parse(res.attachedMessage).value;
+              const returnMsg = JSON.parse(res.attachedMessage).value;
+              this.appLoaderS.close();
+              this.appConfirmS.confirm({title: 'Contract Response', message: 'Congratulations, your account has been verified.' });
               unsubscribe$.next(true);
             }
           },
           err => {
-            this.progressBar.mode = 'determinate';
+            this.appLoaderS.close();
+            this.appConfirmS.confirm({title: 'Contract Response', message: 'Sorry, something wrong went the verification, try again.' });
             this.submitButton.disabled = false;
           }
          );
       }
-      unsubscribe$.unsubscribe();
     }
 
   submit() {

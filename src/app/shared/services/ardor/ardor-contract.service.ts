@@ -160,6 +160,9 @@ export class ArdorContractService {
             map(
                 res => {
                     const lastTx = res.sort(function(a, b){ return (b.timestamp - a.timestamp); })[0];
+                    console.log(broadcastTime);
+                    console.log(lastTx.timestamp);
+                    console.log(broadcastTime - lastTx.timestamp);
                     if (lastTx !== undefined
                         && lastTx.senderRS === ArdorConfig.IdVerifierContractAdress
                         && lastTx.timestamp > broadcastTime
