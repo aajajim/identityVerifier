@@ -1,0 +1,107 @@
+<div fxLayout="row wrap">
+
+  <div fxLayout="column" fxFlex="100" fxFlex.gt-md="40">
+      <!-- Childchains Balances -->
+      <mat-card class="default">
+          <mat-card-title>Balances</mat-card-title>
+          <mat-card-content class="p-0">
+            <mat-list class="compact-list mb-1">
+              <mat-list-item class="" *ngFor="let t of balances | async">
+                <img mat-list-avatar class="mr-1" [src]="t.chainLogo" alt="">
+                <div fxLayout="row" fxFlex="100">
+                  <h6 class="m-0 mr-1">{{t.chainName}}</h6>
+                  <span fxFlex></span>
+                  <p class="mr-1 ml-1">{{t.chainAmount  | number: '.2' }} {{t.chainSymbol}}</p>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+    
+  </div>
+  
+  <div fxLayout="column" fxFlexAlign="stretch" fxFlex="100" fxFlex.gt-md="60">
+    <!-- Verified Accounts -->
+    <mat-card class="default">
+      <mat-card-title>Verified Accounts</mat-card-title>
+      <mat-card-content class="p-0">
+        <div class="list-tasktype">
+          <div class="tasktype-item" *ngFor="let t of verifiedAccounts | async">
+            <img *ngIf="t.faviconUrl" mat-list-avatar class="mr-1" [src]="t.faviconUrl" alt="">
+            <span>{{t.verifiedAcc}}</span>
+            <span fxFlex></span>
+            <span><a href="{{t.verifiedAccUrl}}" style="color: blue; text-decoration: underline" target="_blank">Click here to see published token</a></span>
+            <span fxFlex></span>
+            <mat-chip mat-sm-chip color="primary" [selected]="t.status ? true : false">{{t.status ? 'completed' : 'pending'}}</mat-chip>
+            <button mat-icon-button mat-sm-button [matMenuTriggerFor]="taskMenu" class="tasktype-action ml-1">
+                <mat-icon class="text-muted">more_vert</mat-icon>
+            </button>
+            <mat-menu #taskMenu="matMenu">
+              <button mat-menu-item (onClick)="deleteProperty(t)">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
+
+<!-- Blockchain Activity -->
+<div fxLayout="column wrap">
+    <mat-card class="default">
+        <mat-card-title>Blockchain Activity</mat-card-title>
+        <mat-card-content class="p-0" fxLayout="column">
+          <div class="activity-data">
+            <ngx-datatable class="material bg-white" 
+            [columnMode]="'force'"  
+            [headerHeight]="50"
+            [footerHeight]="50" 
+            [rowHeight]="50"
+            [limit]="6"
+            [rows]="transactions | async">
+              <ngx-datatable-column name="DateTime" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                 <a href="https://test.ardorportal.org/transactions/fullHash/{{row?.fullHash}}/chain/2" style="color: blue; text-decoration: underline" target="_blank"> 
+                   {{ row?.timestamp*1000 | date:'medium' }} 
+                 </a>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Sender" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.senderRS }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Receiver" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.recipientRS }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Type" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.type | txType}}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Amount" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.amountNQT | number: '.2' }}
+                  </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Fee" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.feeNQT | number: '.4'}}
+                  </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Confirmations" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.confirmations | txConfirmations}}
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </mat-card-content>
+      </mat-card>
+</div>

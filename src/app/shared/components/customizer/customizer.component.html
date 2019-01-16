@@ -1,0 +1,65 @@
+<div id="app-customizer">
+  <div class="handle" *ngIf="!isCustomizerOpen">
+    <button 
+    mat-fab
+    color="warn" 
+    (click)="isCustomizerOpen = true">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </div>
+  <mat-card class="p-0" *ngIf="isCustomizerOpen">
+    <mat-card-title class="mat-bg-warn">
+      <div class="card-title-text">
+        <span>Settings</span>
+        <span fxFlex></span>
+        <button 
+        class="card-control" 
+        mat-icon-button
+        (click)="isCustomizerOpen = false">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="pb-1">
+        <h5 class="mt-0">Layouts</h5>
+        <mat-radio-group fxLayout="column" [(ngModel)]="selectedLayout" (change)="changeLayoutStyle($event)">
+            <mat-radio-button [value]="'top'"> Top Navigation </mat-radio-button>
+            <mat-radio-button [value]="'side'"> Side Navigation </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="pb-1">
+        <mat-checkbox [(ngModel)]="isTopbarFixed" (change)="toggleTopbarFixed($event)" [disabled]="selectedLayout === 'top'" [value]="selectedLayout !== 'top'">Fixed Topbar</mat-checkbox>
+      </div>
+      <div class="pb-1">
+        <mat-checkbox [(ngModel)]="layoutConf.breadcrumb" (change)="toggleBreadcrumb($event)">Use breadcrumb</mat-checkbox>
+      </div>
+      <div class="pb-1">
+          <h6 class="mt-0">Breadcrumb Style</h6>
+          <mat-radio-group fxLayout="column" [(ngModel)]="layoutConf.breadcrumb">
+              <mat-radio-button [value]="'simple'"> Simple </mat-radio-button>
+              <mat-radio-button [value]="'title'"> Simple with title </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      <div class="pb-1 pos-rel">
+        <h6 class="m-0 pb-1">Choose a Navigation Style</h6>
+        <mat-radio-group 
+        fxLayout="column" 
+        [(ngModel)]="selectedMenu" 
+        (change)="changeSidenav($event)" 
+        [disabled]="selectedLayout === 'top'">
+          <mat-radio-button 
+          *ngFor="let type of sidenavTypes" 
+          [value]="type.value">
+            {{type.name}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <mat-divider></mat-divider>
+      
+      <div class="pb-1 pt-1">
+        <mat-checkbox [(ngModel)]="isRTL" (change)="toggleDir($event)">RTL</mat-checkbox>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
