@@ -7,6 +7,8 @@ import { ArdorAccountService } from 'app/shared/services/ardor/ardor-account.ser
 import { ArdorContractService } from 'app/shared/services/ardor/ardor-contract.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AppLoaderService } from 'app/shared/services/app-loader/app-loader.service';
+import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.service';
 
 declare var require: any;
 const ardorjs = require('ardorjs');
@@ -21,7 +23,6 @@ export class ProfileSettingsComponent implements OnInit {
   signingFormGroup: FormGroup;
   publishingFormGroup: FormGroup;
   @ViewChild(MatButton) submitButton: MatButton;
-  @ViewChild(MatProgressBar) progressBar: MatProgressBar;
 
   challengeText: string;
   tokenValue: string;
@@ -36,7 +37,9 @@ export class ProfileSettingsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private ardorAS: ArdorAccountService,
-    private ardorCS: ArdorContractService) { }
+    private ardorCS: ArdorContractService,
+    private appLoaderS: AppLoaderService,
+    private appConfirmS: AppConfirmService) { }
 
   ngOnInit() {
     this.challengeText = '';
@@ -76,6 +79,7 @@ export class ProfileSettingsComponent implements OnInit {
     const unsubscribe$ = new Subject<boolean>();
     if (passphrase) {
       this.waitResponse = true;
+      this.appLoaderS.open('Please wait for contract response!');
       const now = new Date();
       const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
       this.ardorCS.generateToken(this.tokenFormGroup.controls['myPassphrase'].value, broadcastTime)
@@ -87,20 +91,19 @@ export class ProfileSettingsComponent implements OnInit {
             this.tokenValue = JSON.parse(res.attachedMessage).token;
             this.tokenFormGroup.controls['challengeText'].setValue(this.challengeText);
             this.tokenFormGroup.controls['challengeToken'].setValue(this.tokenValue);
-            this.progressBar.mode = 'determinate';
             this.submitButton.disabled = true;
+            this.appLoaderS.close();
             unsubscribe$.next(true);
           }
         },
         err => {
           this.tokenFormGroup.controls['challengeText'].setValue(errMsg);
           this.tokenFormGroup.controls['challengeToken'].setValue(errMsg);
-          this.progressBar.mode = 'determinate';
+          this.appLoaderS.close();
           this.submitButton.disabled = false;
         }
        );
     }
-    unsubscribe$.unsubscribe();
   }
 
   signToken() {

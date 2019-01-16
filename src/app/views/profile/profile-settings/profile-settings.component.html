@@ -25,7 +25,6 @@
                       [formControl]="tokenFormGroup.controls['myPassphrase']"
                       required>
                   </mat-form-field>
-                  <mat-progress-bar *ngIf="waitResponse" mode="indeterminate" class="session-progress full-width pt-1"></mat-progress-bar>
                   <mat-form-field *ngIf="waitResponse" class="full-width" appearance="outline">
                     <mat-label>Challenge text</mat-label>
                     <textarea 
@@ -103,8 +102,6 @@
                     <button mat-raised-button class="mat-accent full-width mb-1" (click)="signToken()">Sign Token</button>
               </div>
               
-
-
               <div fxLayout="row">
                 <button mat-raised-button color="accent" matStepperPrevious>Back</button>
                 <span fxFlex="8px"></span>
