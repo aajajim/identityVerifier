@@ -27,7 +27,7 @@ export class ProfileOverviewComponent implements OnInit {
   }
 
   deleteProperty(prop: ArdorProperty) {
-    this.ardorAS.deleteProperty(prop.property)
+    this.ardorAS.deleteProperty(prop);
   }
 
 }

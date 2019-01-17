@@ -201,6 +201,18 @@ export class ArdorAccountService {
       catchError(handleErrors<Array<ArdorTransaction>>('getAcccountTransactions', []))
     );
   }
+
+  deleteAccountProperty(prop: ArdorProperty) {
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    // Receive request
+    let uri = new URLSearchParams({
+      requestType: 'getUnconfirmedTransactions',
+      chain: '2',
+      recipient: this.account.accountRS,
+      setter: prop.setterRS,
+      property: prop.property
+    });
+  }
   //#endregion
 
   //#region Common Methods
