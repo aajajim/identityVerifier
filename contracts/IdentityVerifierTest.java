@@ -1,6 +1,5 @@
-package aajajim.contracts.identityverifier;
-import com.jelurida.ardor.contracts.AbstractContractTest;
-import com.jelurida.ardor.contracts.ContractTestHelper;
+package com.jelurida.ardor.contracts;
+import aajajim.contracts.identityverifier.IdentityVerifier;
 import nxt.addons.JA;
 import nxt.addons.JO;
 import nxt.blockchain.Block;
@@ -129,10 +128,10 @@ public class IdentityVerifierTest extends AbstractContractTest {
     @Test
     public void PublicAccountVerificationTestByPayment(){
         String contractName = ContractTestHelper.deployContract(IdentityVerifier.class);
-        String challenge = "1#1470317583254217001";
-        String token = "9d0bf2903f889329d0da4653b346ddcf4d8ab0d06bb4849e2ac08aed9f135a07d0290bb8b29aba81cce19b3af06129aaedef6178b1ecc3871bb501e0b2e76d06";
+        String challenge = "1#15661561748981954091";
+        String token = "dc6ce3666d088625eac4bd59d1b6b2c1499600fc3e7ebf250f080af5b6a54309a1e7da9a4ad2aee5caf7588f73d00c611b1e8575a0e95a93c8ef7703b8957d46";
         byte[] signedChallenge = Crypto.sign(Convert.parseHexString(token), BOB.getSecretPhrase());
-        String url = "https://twitter.com/aajaji_m/status/1083320344084168704";
+        String url = "https://twitter.com/aajaji_m/status/1086563315625717760";
 
         JO params = new JO();
         params.put(IdentityVerifier.IVConstants.VERIF_TYPE, IdentityVerifier.IVConstants.VERIF_PUBLIC_ACCOUNT);
@@ -223,7 +222,7 @@ public class IdentityVerifierTest extends AbstractContractTest {
 
     //Test KO: We expect the contract to generate an error message
     @Test
-    public void PhoneNumberGetChallengeTestByMessage(){
+    public void PhoneNumberGetChallengeTestByRequest(){
         String contractName = ContractTestHelper.deployContract(IdentityVerifier.class);
         JO params = new JO();
         params.put(IdentityVerifier.IVConstants.VERIF_TYPE, IdentityVerifier.IVConstants.VERIF_PHONE_NUMBER);
