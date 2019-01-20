@@ -46,7 +46,7 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
     //   this.sidebarPS.destroy();
     // }
     if(this.menuItemsSub) {
-      this.menuItemsSub.unsubscribe()
+      this.menuItemsSub.unsubscribe();
     }
   }
 

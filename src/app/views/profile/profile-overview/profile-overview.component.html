@@ -3,7 +3,7 @@
   <div fxLayout="column" fxFlex="100" fxFlex.gt-md="40">
       <!-- Childchains Balances -->
       <mat-card class="default">
-          <mat-card-title>Balances</mat-card-title>
+          <mat-card-title><b>Balances</b></mat-card-title>
           <mat-card-content class="p-0">
             <mat-list class="compact-list mb-1">
               <mat-list-item class="" *ngFor="let t of balances | async">
@@ -23,7 +23,7 @@
   <div fxLayout="column" fxFlexAlign="stretch" fxFlex="100" fxFlex.gt-md="60">
     <!-- Verified Accounts -->
     <mat-card class="default">
-      <mat-card-title>Verified Accounts</mat-card-title>
+      <mat-card-title><b>Verified Accounts</b></mat-card-title>
       <mat-card-content class="p-0">
         <div class="list-tasktype">
           <div class="tasktype-item" *ngFor="let t of verifiedAccounts | async">
@@ -32,12 +32,12 @@
             <span fxFlex></span>
             <span><a href="{{t.verifiedAccUrl}}" style="color: blue; text-decoration: underline" target="_blank">Click here to see published token</a></span>
             <span fxFlex></span>
-            <mat-chip mat-sm-chip color="primary" [selected]="t.status ? true : false">{{t.status ? 'completed' : 'pending'}}</mat-chip>
+            <mat-chip mat-sm-chip color="primary" [selected]="t.status ? true : false">{{t.status ? 'Verified' : 'Pending'}}</mat-chip>
             <button mat-icon-button mat-sm-button [matMenuTriggerFor]="taskMenu" class="tasktype-action ml-1">
                 <mat-icon class="text-muted">more_vert</mat-icon>
             </button>
             <mat-menu #taskMenu="matMenu">
-              <button mat-menu-item (onClick)="deleteProperty(t)">
+              <button mat-menu-item (click)="openDeletePropertyPopUp(t)">
                 <mat-icon>delete</mat-icon>
                 <span>Delete</span>
               </button>
@@ -53,7 +53,7 @@
 <!-- Blockchain Activity -->
 <div fxLayout="column wrap">
     <mat-card class="default">
-        <mat-card-title>Blockchain Activity</mat-card-title>
+        <mat-card-title><b>Blockchain Activity</b></mat-card-title>
         <mat-card-content class="p-0" fxLayout="column">
           <div class="activity-data">
             <ngx-datatable class="material bg-white" 
@@ -87,7 +87,7 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Amount" [flexGrow]="1">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.amountNQT | number: '.2' }}
+                    {{ row?.amountNQT | number: '.4' }}
                   </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Fee" [flexGrow]="1">

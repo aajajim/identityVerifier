@@ -1,0 +1,60 @@
+<h3 matDialogTitle>{{data.title}}</h3>
+  <form [formGroup]="itemForm" (submit)="submit()">
+  <div fxLayout="row wrap" fxLayout.lt-sm="column">
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="setter"
+        [formControl]="itemForm.controls['setter']"
+        placeholder="Setter Account">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="account"
+        [formControl]="itemForm.controls['account']"
+        placeholder="Recepient Account">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="100"  class="mt-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="publicUrl"
+        [formControl]="itemForm.controls['publicUrl']"
+        placeholder="Public Url">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="100"  class="mt-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="value"
+        [formControl]="itemForm.controls['value']"
+        placeholder="Property Value">
+      </mat-form-field>
+    </div>
+    <div fxFlex="100"  class="mt-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="passPhrase"
+        [formControl]="itemForm.controls['passPhrase']"
+        placeholder="Your Passphrase">
+      </mat-form-field>
+    </div>
+    
+
+    <div fxFlex="100" class="mt-1">
+      <button mat-raised-button color="primary" [disabled]="itemForm.invalid">Delete</button>
+      <span fxFlex></span>
+      <button mat-button color="warn" type="button" (click)="dialogRef.close(false)">Cancel</button>
+    </div>
+  </div>
+  </form>

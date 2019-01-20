@@ -242,14 +242,14 @@ public class IdentityVerifier extends AbstractContract {
                 if(!VerifyUrl(signedToken, publicURL)){
                     return createErrorResponse(10104, "The PUBLIC_URL provided does not contain the signedToken!");
                 }
-
+                URL url = new URL(publicURL);
                 // Assign to property to the account
                 JO value = new JO();
                 value.put(IVConstants.CHALLENGE, challenge);
                 value.put(IVConstants.PUBLIC_URL, publicURL);
                 SetAccountPropertyCall setProp = SetAccountPropertyCall.create(context.getChainOfTransaction().getId())
                         .recipient(context.getSenderId())
-                        .property(IVConstants.VERIFIED_ACCOUNT)
+                        .property(IVConstants.VERIFIED_ACCOUNT + "_" + url.getHost() )
                         .value(value.toJSONString());
                 JO response = callContext.createTransaction(setProp);
 
@@ -270,7 +270,6 @@ public class IdentityVerifier extends AbstractContract {
                 try{
                     URL url = new URL(publicURL);
                     URLConnection conn = url.openConnection();
-
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     String inputLine;
                     while((inputLine = buffer.readLine()) != null){

@@ -81,13 +81,13 @@
    -->
   <!-- Top left user menu -->
   <button mat-icon-button [matMenuTriggerFor]="accountMenu" class="topbar-button-right img-button">
-    <img src="assets/images/decentralizedIV.jpg" alt="">
+    <img src="./assets/images/decentralizedIV.jpg" alt="">
   </button>
   <mat-menu #accountMenu="matMenu">
-    <button mat-menu-item [routerLink]="['/profile/overview']">
-      <mat-icon>account_box</mat-icon>
-      <span>Profile</span>
-    </button>
+      <button mat-menu-item [routerLink]="['/profile/overview']">
+        <mat-icon>account_box</mat-icon>
+        <span>Profile</span>
+      </button>
     <button mat-menu-item [routerLink]="['/profile/settings']">
       <mat-icon>settings</mat-icon>
       <span>Verify an account</span>

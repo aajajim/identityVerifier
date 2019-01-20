@@ -23,11 +23,12 @@ When you clone this repo for the first time, please ensure to run `npm install` 
 
 Run `ng serve` to build the project and serve in the browser at http://localhost:4200.
 
-* During the build process, you may encounter an issue with Angular saying that it can't find the Crypto module. This is a known issue with Angular build when it comes to using Node packages. In order to solve this please go to:
+*During the build process, you may encounter an issue with Angular saying that it can't find the Crypto module. This is a known issue with Angular build when it comes to using Node packages. In order to solve this please go to:
 <RepoFolder>\node_modules\@angular-devkit\build-angular\src\angular-cli-files\models\webpack-configs\browser.js
 and replace `node: false,`  with the following line:*
+
 ` node: { crypto: true},`
 
-## Further help
+# Further help
 
 To get more help on how this web app work or on the contract, please send message on twitter @aajaji_m.

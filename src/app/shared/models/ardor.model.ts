@@ -23,16 +23,16 @@ export class ArdorProperty {
     public faviconUrl: string;
     public verifiedAcc: string;
     public verifiedAccUrl: string;
-    public setterRS: string;
+    public receipient: string;
     public setter: string;
     public property: string;
     public value: string;
     public status: boolean;
 
-    constructor(prop: Object) {
+    constructor(receipient: string, setter: string, prop: Object) {
         let js = JSON.parse(JSON.stringify(prop));
-        this.setterRS = js.setterRS;
-        this.setter = js.setter;
+        this.setter = setter;
+        this.receipient = receipient;
         this.property = js.property;
         this.value = js.value;
         this.status = true;
@@ -123,7 +123,7 @@ export class ArdorBalance {
         this.chainName = name;
         this.chainSymbol = symbol;
         this.chainAmount = parseInt(amount, 10) / 10 ** decimals;
-        this.chainLogo = '/assets/images/childchains/' + logo;
+        this.chainLogo = './assets/images/childchains/' + logo;
     }
 }
 

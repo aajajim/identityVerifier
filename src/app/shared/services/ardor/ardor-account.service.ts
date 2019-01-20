@@ -8,10 +8,11 @@ import { ArdorProperty, ArdorAccount, ArdorBalance, ArdorTransaction } from '../
 
 import { ArdorConfig } from '../../config/ardor.config';
 import { handleErrors } from './generic-methods';
+import { ArdorService } from './ardor.service';
 
 
 const BUFFER_ZISE = 1;
-const REFRESH_INTERVAL = 10000;
+const REFRESH_INTERVAL = 30000;
 
 @Injectable()
 export class ArdorAccountService {
@@ -66,7 +67,7 @@ export class ArdorAccountService {
   }
   //#endregion
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private ardorS: ArdorService) { }
 
   //#region Ardor account queries
   getAccount(account: string): Observable<ArdorAccount> {
@@ -96,7 +97,6 @@ export class ArdorAccountService {
     const uri = new URLSearchParams({
       requestType: 'getAccountProperties',
       recipient: account,
-      property: 'verifiedAccount',
       setter: ArdorConfig.IdVerifierContractAdress
     });
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
@@ -107,7 +107,8 @@ export class ArdorAccountService {
       uri.toString(),
       {headers: headers}
     ).pipe(
-      map(res => res['properties'].map(e => new ArdorProperty(e))),
+      map(res => res['properties'].filter(res => JSON.parse(JSON.stringify(res)).property.includes('verifiedAccount'))
+                                  .map(e => new ArdorProperty(account, ArdorConfig.IdVerifierContractAdress, e))),
       catchError(handleErrors<Array<ArdorProperty>>('getAcccountProperties', []))
     );
   }
@@ -202,16 +203,35 @@ export class ArdorAccountService {
     );
   }
 
-  deleteAccountProperty(prop: ArdorProperty) {
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
-    // Receive request
-    let uri = new URLSearchParams({
-      requestType: 'getUnconfirmedTransactions',
+  deleteAccountProperty(prop: ArdorProperty, passPhrase: string) {
+    const requestType = 'deleteAccountProperty';
+    const data = new URLSearchParams({
       chain: '2',
+      amountNQT: '0',
       recipient: this.account.accountRS,
-      setter: prop.setterRS,
-      property: prop.property
+      setter: prop.setter,
+      property: prop.property,
+      publicKey: this.account.publicKey
     });
+    this.ardorS.getUnsignedBytes(requestType, data).subscribe(
+      res => {
+          if (res !== undefined && !res['errorDescription']) {
+              const unsignedTx = res['unsignedTransactionBytes'];
+              const attachment = res['transactionJSON']['attachment'];
+              const signedTx = this.ardorS.verifyAndSign(unsignedTx, this.account.publicKey, passPhrase, requestType, data);
+              if (signedTx !== 'error!') {
+                  this.ardorS.broadcastTransaction(signedTx, attachment).subscribe(
+                      ress => {
+                          this.clearCaches();
+                          return (ress !== undefined && ress['fullHash']);
+                      },
+                      errr => { handleErrors('generateToken', null); }
+                  );
+              }
+          }
+      },
+      err => { handleErrors('getUnsignedBytes', null); }
+  );
   }
   //#endregion
 

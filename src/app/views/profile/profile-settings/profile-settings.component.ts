@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatProgressBar, MatButton } from '@angular/material';
-import { FileUploader } from 'ng2-file-upload';
+import { MatButton } from '@angular/material';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ArdorConfig } from 'app/shared/config/ardor.config';
 import { ArdorAccountService } from 'app/shared/services/ardor/ardor-account.service';
@@ -36,6 +36,7 @@ export class ProfileSettingsComponent implements OnInit {
   waitResponse = false;
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     private ardorAS: ArdorAccountService,
     private ardorCS: ArdorContractService,
@@ -82,7 +83,7 @@ export class ProfileSettingsComponent implements OnInit {
       this.waitResponse = true;
       this.appLoaderS.open('Please wait for contract response!');
       const now = new Date();
-      const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
+      const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 59);
       this.ardorCS.generateToken(this.passPhrase, broadcastTime)
       .pipe(takeUntil(unsubscribe$))
       .subscribe(
@@ -138,6 +139,7 @@ export class ProfileSettingsComponent implements OnInit {
               } else {
                 this.ardorAS.clearCaches();
                 this.appConfirmS.confirm({title: 'Contract Response', message: 'Congratulations, your account has been verified.' });
+                this.router.navigate(['/profile/overview']);
               }
               unsubscribe$.next(true);
             }

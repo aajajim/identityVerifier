@@ -21,6 +21,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ArdorAccountService } from './shared/services/ardor/ardor-account.service';
 import { ArdorContractService } from './shared/services/ardor/ardor-contract.service';
+import { ArdorService } from './shared/services/ardor/ardor.service';
 
 
 // AoT requires an exported function for factories
@@ -54,7 +55,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig },
     { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },
     ArdorAccountService,
-    ArdorContractService
+    ArdorContractService,
+    ArdorService
   ],
   bootstrap: [AppComponent]
 })

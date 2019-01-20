@@ -28,6 +28,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ProfileComponent } from './profile.component';
 import { ProfileOverviewComponent } from './profile-overview/profile-overview.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
+import { DeletePropertyPopupComponent } from './profile-overview/delete-property-popup/delete-property-popup.component';
 import { ProfileRoutes } from './profile.routing';
 
 @NgModule({
@@ -57,6 +58,7 @@ import { ProfileRoutes } from './profile.routing';
     SharedModule,
     RouterModule.forChild(ProfileRoutes)
   ],
-  declarations: [ProfileComponent, ProfileOverviewComponent, ProfileSettingsComponent]
+  declarations: [ProfileComponent, ProfileOverviewComponent, ProfileSettingsComponent, DeletePropertyPopupComponent],
+  entryComponents: [DeletePropertyPopupComponent]
 })
 export class ProfileModule { }
