@@ -120,7 +120,7 @@ export class ProfileSettingsComponent implements OnInit {
     if (this.passPhrase) {
       this.appLoaderS.open('Please wait for contract response!');
       const now = new Date();
-      const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 60);
+      const broadcastTime = Math.floor(now.getTime() / 1000 - now.getTimezoneOffset() * 59);
       this.submitButton.disabled = true;
       this.ardorCS.verifyAccount(
         this.challengeText,
