@@ -136,6 +136,7 @@ export class ProfileSettingsComponent implements OnInit {
               this.appLoaderS.close();
               if (returnMsg['errorDescription']) {
                 this.appConfirmS.confirm({title: 'Contract Response', message: returnMsg['errorDescription'] });
+                this.router.navigate(['/profile/overview']);
               } else {
                 this.ardorAS.clearCaches();
                 this.appConfirmS.confirm({title: 'Contract Response', message: 'Congratulations, your account has been verified.' });
@@ -147,6 +148,7 @@ export class ProfileSettingsComponent implements OnInit {
           err => {
             this.appLoaderS.close();
             this.appConfirmS.confirm({title: 'Contract Response', message: 'Sorry, something wrong went with the verification, try again.' });
+            this.router.navigate(['/profile/overview']);
             this.submitButton.disabled = false;
           }
          );

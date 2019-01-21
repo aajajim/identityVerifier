@@ -26,6 +26,7 @@
                       [(ngModel)]="passPhrase"
                       required>
                   </mat-form-field>
+                  <h5 *ngIf="waitResponse">Please note that a challenge is valid for 30min!</h5>
                   <mat-form-field *ngIf="waitResponse" class="full-width" appearance="outline">
                     <mat-label>Challenge text</mat-label>
                     <textarea 
@@ -114,7 +115,7 @@
 
           <mat-step [stepControl]="publishingFormGroup">
             <form [formGroup]="publishingFormGroup">
-              <ng-template matStepLabel>Sign the challenge token</ng-template>
+              <ng-template matStepLabel>Verify your account</ng-template>
               <div fxLayout="column">
                   <mat-form-field class="full-width pt-1"  appearance="outline">
                       <mat-label>My Ardor Account</mat-label>

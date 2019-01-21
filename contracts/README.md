@@ -7,7 +7,7 @@ The contract is deployed on Ignis, which is a Childchain on the Ardor blockchain
 # How the contract works?
 In order to verify that you control an ardor account, you need to:
 - Send a message to the contract account to ask for a challenge
-- Contract will respond with a challengeText and a Token that represents the signature of the challengeText by the contract account
+- Contract will respond with a challengeText and a Token that represents the signature of the challengeText by the contract account. **Please note a chalenge is only valid for 30min (180 blocks in Ardor TestNet)**
 - Send an Ignis payment transaction with an attached message where you sumbit 3 things: 
     - The challengeText
     - A signedToken which correspond to your signature of the Token (sent by contract in step 2) using your passPhrase/privateKey, this will prove that you control your account
