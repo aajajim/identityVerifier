@@ -4,9 +4,19 @@ This project is a response to the [Ardor Online Hackathon](https://www.jelurida.
 
 # Pain points of a pure decentralized world
 The contract is designed to help users to verify their identity and increase their trustworthiness.
-Indeed, in a decentralized world all crypto accounts (bitcoin account, ardor account, etheruem account...) are anonymous and this can be a problem for many users who want to interact with others especially when it comes to send them cryptocurrencies. We all recall when some ICOs websites got hacked and the wallet address has been changed without any way for the users to know if they can trust the wallet address or not!
+Indeed, in a decentralized world all crypto accounts (bitcoin account, ardor account, etheruem account...) are anonymous and this can be a problem for many users who want to interact with others, especially when it comes to send them cryptocurrencies(money). We all recall when that some ICOs websites got hacked and the wallet address has been changed without any way for the users to know if they can trust the wallet address or not!
 
-This contract aims at filling this gap by providing a solution where the holder of a wallet address (an ICO founder, an e-Commerce marchant, an Social Media influencer...) can link his wallet address with his true identities (social media account, e-commerce account, email account, phone number, ...)
+This application, leveraging Ardor smart contracts, aims at filling this gap by providing a solution where the holder of a wallet address (an ICO founder, an e-Commerce marchant, an Social Media influencer...) can link his wallet address with his true identities (social media account, e-commerce account, email account, phone number, ...). In this way, the other users can simply use the application by providing it with the holder account and they can immedially see which real world accounts are associated to it, and if it really belongs to the preclamed holder, they can trust it and enter into relation with it.
+
+# Demo Application
+
+You can find a demo of the app in this youtube video (*I will try to upload a new one with more technical details later*)
+
+<div style="text-align:center">
+
+[![Identity Verifier app](https://img.youtube.com/vi/86HYlgWk7aU/0.jpg)](https://www.youtube.com/watch?v=86HYlgWk7aU)
+
+</div>
 
 # LightWeight smart Contract
 
