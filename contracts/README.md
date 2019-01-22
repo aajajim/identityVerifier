@@ -53,4 +53,5 @@ Please refer to the [Ardor LightWeight contract documentation](https://ardordocs
             "publicUrl":"<YOUR Public URL WHERE SIGNED TOKEN HAS BEEN PUBLISHED>"
         }
     }
-}```
+}
+```
